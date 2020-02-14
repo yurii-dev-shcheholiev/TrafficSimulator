@@ -29,8 +29,11 @@ public class Vehicle extends SimulatedObject {
 
         _maxSpeed = maxSpeed;
         _contamination = contClass;
-        _itinerary = Collections.unmodifiableList(new ArrayList<>(itinerary));;
-        //TODO initialize other fields
+        _itinerary = Collections.unmodifiableList(new ArrayList<>(itinerary));
+        
+        _road = null;
+        _totalContamination = 0;
+        _totalDistance = 0;
     }
 
     int getLocation() {
@@ -65,7 +68,7 @@ public class Vehicle extends SimulatedObject {
 
     void setContClass(int contClass) {
         if (contClass < 0 || contClass > 10)
-            throw new IllegalArgumentException("Contamination class must be in range 1-10");
+            throw new IllegalArgumentException("Contamination class must be in range 0-10");
         _contamination = contClass;
     }
 
@@ -75,20 +78,50 @@ public class Vehicle extends SimulatedObject {
 
     @Override
     void advance(int time) {
-        if (!_status.equals(VehicleStatus.TRAVELING))
-            return;
-
-        _location = Math.min(_location + _currentSpeed, _road.getLength());
-//        _contamination = 1;
+        if (!_status.equals(VehicleStatus.TRAVELING)) {
+        	_currentSpeed = 0;
+        	return;
+        }
+        
+        int _previousLocation = _location;
+        
+        //(a)
+        _location = Math.min(_previousLocation + _currentSpeed, _road.getLength());
+        
+        _totalDistance += _location;
+        
+        //(b)
+        
+        int c = ((_location - _previousLocation) * _contamination);
+        _totalContamination += c;  
+        
+        //(c)
         if (_location == _road.getLength())
             _status = VehicleStatus.WAITING;
-//            _itinerary;
+        	_currentSpeed = 0;
+//            _itinerary;  JUNCTION
+        
         //TODO
     }
 
     @Override
     public JSONObject report() {
-        //TODO
-        return null;
+     
+    	JSONObject ob = new JSONObject();
+    	ob.put("id", _id);
+    	ob.put("speed", _currentSpeed);
+    	ob.put("distance", _totalDistance);
+    	ob.put("co2", _totalContamination);
+    	ob.put("class", _contamination);
+    	ob.put("status", _status);
+    	
+    	
+    	if (!(_status.equals(VehicleStatus.PENDING) || _status.equals(VehicleStatus.ARRIVED))) {
+    		
+    		ob.put("road", _road.getId());
+    		ob.put("location", _location);
+		}
+    	
+    	return ob;
     }
 }
