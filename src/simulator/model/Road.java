@@ -31,7 +31,6 @@ public abstract class Road extends SimulatedObject{
         if (weather == null)
             throw new IllegalArgumentException("Weather must not be null");
 
-        // TODO modify Junctions in constructor
         _srcJunction = srcJunc;
         _destJunction = destJunc;
         _maxSpeed = maxSpeed;
