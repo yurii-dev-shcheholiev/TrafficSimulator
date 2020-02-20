@@ -1,7 +1,6 @@
 package simulator.model;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.json.JSONObject;
 
@@ -34,6 +33,10 @@ public class Junction extends SimulatedObject{
 		_xCoor = xCoor;
 		_yCoor = yCoor;
 		
+		_inRoads = new ArrayList<Road>();
+		_outRoads = new HashMap<Junction, Road>();
+		_queues = new ArrayList<List<Vehicle>>();
+		_mapQ = new HashMap<Road, List<Vehicle>>();
 		
 		// TODO initialize the rest
 	}
@@ -42,38 +45,61 @@ public class Junction extends SimulatedObject{
 	void addInCommingRoad(Road r) {
 		//TODO
 		
+		_inRoads.add(r);
+		
+		List<Vehicle> q = new LinkedList<>();
+		_queues.add(q);
+
+		_mapQ.put(r, q);
+
+		if (!(r.getDestJunction().equals(this)))
+			throw new IllegalArgumentException("Destination is not Equal to Current Junction");
+
 	}
 	
 	
 	void addOutGoingRoad(Road r) {
-		
 		//TODO
+		
+		//if(_outRoads.containsValue(r))
+		Junction j = r.getDestJunction();
+
+		if (_outRoads.containsKey(j) && !(j.equals(this)))
+			throw new IllegalArgumentException("Other Roads go to Junction and is Not a Destination");
+
+		_outRoads.put(j, r);
+
 	}
 	
 	
 	void enter(Road r, Vehicle v) {
-		
 		//TODO
+		r.enter(v);
 	}
 	
 	
 	Road roadTo(Junction j) {
-		
-		//TODO
-		
-		return null;
+		return _outRoads.get(j);
 	}
-	
-	
+
+
 	@Override
 	void advance(int time) {
-		// TODO 
+		// TODO
+
+
 		
 	}
 
+
 	@Override
 	public JSONObject report() {
-		// TODO 
+		// TODO
+
+		JSONObject
+
 		return null;
 	}
+
+
 }
