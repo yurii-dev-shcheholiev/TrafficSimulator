@@ -1,9 +1,6 @@
 package simulator.model;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.json.JSONObject;
-import simulator.misc.SortedArrayList;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +9,10 @@ public abstract class Road extends SimulatedObject{
     private Junction _destJunction;
     private int _length;
     private int _maxSpeed;
-    private int _limitSpeed;
+    protected int _limitSpeed;
     private int _contLimit;
     private Weather _weather;
-    private int _totalContamination;
+    protected int _totalContamination;
     //should always be sorted by vehicle location
     private List<Vehicle> _vehicles;
 
@@ -34,7 +31,6 @@ public abstract class Road extends SimulatedObject{
         if (weather == null)
             throw new IllegalArgumentException("Weather must not be null");
 
-        // TODO modify Junctions in constructor
         _srcJunction = srcJunc;
         _destJunction = destJunc;
         _maxSpeed = maxSpeed;
@@ -57,6 +53,18 @@ public abstract class Road extends SimulatedObject{
 
     public Junction getDestJunction() {
         return _destJunction;
+    }
+
+    protected int getContLimit() {
+        return _contLimit;
+    }
+
+    protected Weather getWeather() {
+        return _weather;
+    }
+
+    protected int getMaxSpeed() {
+        return _maxSpeed;
     }
 
     void setWeather(Weather weather) {
@@ -86,18 +94,22 @@ public abstract class Road extends SimulatedObject{
     void advance(int time) {
         reduceTotalContamination();
         updateSpeedLimit();
-
-        // TODO if it is correct
         for (Vehicle vehicle : _vehicles) {
             vehicle.setSpeed(calculateVehicleSpeed(vehicle));
             vehicle.advance(time);
         }
-        // TODO recall vehicle sorting
+        _vehicles.sort((o1, o2) -> o2.getLocation() - o1.getLocation());
     }
 
     @Override
     public JSONObject report() {
-        return null;
+        JSONObject ob = new JSONObject();
+        ob.put("id", _id);
+        ob.put("speedlimit", _limitSpeed);
+        ob.put("weather", _weather);
+        ob.put("co2", _totalContamination);
+        ob.put("vehicles", _vehicles);
+        return ob;
     }
 
     abstract void reduceTotalContamination();
