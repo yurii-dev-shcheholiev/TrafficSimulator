@@ -114,10 +114,8 @@ public class Vehicle extends SimulatedObject {
     	ob.put("co2", _totalContamination);
     	ob.put("class", _contamination);
     	ob.put("status", _status);
-    	
-    	
+
     	if (!(_status.equals(VehicleStatus.PENDING) || _status.equals(VehicleStatus.ARRIVED))) {
-    		
     		ob.put("road", _road.getId());
     		ob.put("location", _location);
 		}
