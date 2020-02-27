@@ -79,7 +79,7 @@ public class Junction extends SimulatedObject{
 		}//if
 
 		//switch light
-		int g = _lsStrategy.chooseNextGreen( _inRoads, _queues.get(_greenL) ,_greenL, _lastSwitchT, time);
+		int g = _lsStrategy.chooseNextGreen( _inRoads, _queues ,_greenL, _lastSwitchT, time);
 
 		if ( _greenL != g ){
 			_greenL = g;
