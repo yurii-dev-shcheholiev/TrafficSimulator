@@ -1,6 +1,8 @@
 package simulator.model;
 
 import java.util.*;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Junction extends SimulatedObject{
@@ -99,16 +101,18 @@ public class Junction extends SimulatedObject{
 			j.put("green", "none");
 		}
 
+		JSONArray queues = new JSONArray();
 		JSONObject qu = new JSONObject();
+		JSONArray vIds = new JSONArray();
+
 		for ( Road rx : _inRoads) {
 			qu.put("roads", rx.getId());
-
-			for (Vehicle vx : _mapQ.get(rx)) {
-				qu.put("vehicles", vx.getId());
-			}
+			vIds.put(_mapQ.get(rx));
+			qu.put("vehicles", vIds);
+			queues.put(qu);
 		}
-		j.put("queues", qu);
 
+		j.put("queues", queues);
 		return j;
 	}
-}//End
+}
