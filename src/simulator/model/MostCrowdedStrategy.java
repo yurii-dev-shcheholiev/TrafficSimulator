@@ -25,24 +25,21 @@ public class MostCrowdedStrategy implements LightSwitchingStrategy {
 			return currGreen;
 		}
 		//Giving green to incoming road with largest queue
-		return circularSearch(qs, currGreen);
+		return circularSearch(qs, currGreen +1);
 	}
+
 
 	// method that does a circular search for both of them instead of doing a FOR.
 	public int circularSearch(List<List<Vehicle>> qs, int position) {
-		int i = position + 1, m = i % qs.size(), largest = m;
+		int m = position;
+		int largest = m;
 
 		do {
-			m = i % qs.size();
+			m = m + 1 % qs.size();
 
-			if (m > qs.size() || qs.get(m).size() == qs.get(largest).size()){
-				i++;
-			}
-			else if (qs.get(m).size() > qs.get(largest).size()){
+			if (qs.get(m).size() > qs.get(largest).size()){
 				largest = m;
-				i++;
 			}
-			else i++;
 		} while (m != position);
 
 		return largest;
