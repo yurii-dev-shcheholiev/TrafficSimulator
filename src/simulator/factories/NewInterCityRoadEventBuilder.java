@@ -4,8 +4,8 @@ import simulator.model.Event;
 import simulator.model.NewInterCityRoadEvent;
 
 public class NewInterCityRoadEventBuilder extends NewRoadEventBuilder {
-    NewInterCityRoadEventBuilder(String type) {
-        super(type);
+    NewInterCityRoadEventBuilder() {
+        super("new_inter_city_road");
     }
 
     @Override
