@@ -6,7 +6,7 @@ public class SetContaminationClassEvent extends Event {
 
     private List<Pair<String, Integer>> _cs;
 
-    SetContaminationClassEvent(int time, List<Pair<String, Integer>> cs) {
+    public SetContaminationClassEvent(int time, List<Pair<String, Integer>> cs) {
         super(time);
 
         if (cs == null)
