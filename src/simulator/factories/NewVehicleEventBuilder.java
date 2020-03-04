@@ -8,11 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewVehicleEventBuilder extends Builder<Event> {
-    private int time;
-    private String id;
-    private int co2limit;
-    private int maxspeed;
-    private List<String> itinerary;
 
     NewVehicleEventBuilder() {
         super("new_vehicle");
@@ -20,6 +15,11 @@ public class NewVehicleEventBuilder extends Builder<Event> {
 
     @Override
     protected Event createTheInstance(JSONObject data) {
+        int time;
+        String id;
+        int co2limit;
+        int maxspeed;
+        List<String> itinerary;
         try {
             time = (data.getInt("time"));
             id = data.getString("id");

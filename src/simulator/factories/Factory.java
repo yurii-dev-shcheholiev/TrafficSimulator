@@ -6,6 +6,7 @@ public interface Factory<T> {
 	public T createInstance(JSONObject info);
 }
 
+// TODO
 //	List<Builder<LightSwitchingStrategy>> lsbs =newArrayList<>();
 //	lsbs.add(newRoundRobinStrategyBuilder() );
 //	lsbs.add(newMostCrowdedStrategyBuilder() );
