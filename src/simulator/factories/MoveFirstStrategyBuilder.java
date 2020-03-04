@@ -6,8 +6,8 @@ import simulator.model.MoveFirstStrategy;
 
 public class MoveFirstStrategyBuilder extends Builder<DequeuingStrategy> {
 
-    MoveFirstStrategyBuilder(String type) {
-        super(type);
+    MoveFirstStrategyBuilder() {
+        super("move_first_dqs");
     }
 
     @Override
