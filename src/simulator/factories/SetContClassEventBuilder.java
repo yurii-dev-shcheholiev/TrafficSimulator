@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SetContClassEventBuilder extends Builder<Event> {
 
-    SetContClassEventBuilder() {
+    public SetContClassEventBuilder() {
         super("set_cont_class");
     }
 

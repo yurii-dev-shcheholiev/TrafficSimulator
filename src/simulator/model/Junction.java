@@ -20,10 +20,10 @@ public class Junction extends SimulatedObject{
 	Junction(String id, LightSwitchingStrategy lsStrategy, DequeuingStrategy dqStrategy, int xCoor, int yCoor ) {
 		super(id);
 		
-		if (lsStrategy.equals(null) && dqStrategy.equals(null)) 
+		if (lsStrategy == null || dqStrategy == null)
 			throw new IllegalArgumentException("The Light Switch and the Dequeing must not be empty");
 		
-		if(xCoor < 0 && yCoor < 0) 
+		if(xCoor < 0 || yCoor < 0)
 			throw new IllegalArgumentException("The x and y coordinates must be either 0 or of positive value");
 
 		_greenL = 0;

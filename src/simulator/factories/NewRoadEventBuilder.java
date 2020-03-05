@@ -13,7 +13,7 @@ public abstract class NewRoadEventBuilder extends Builder<Event> {
     protected int maxspeed;
     protected Weather weather;
 
-    NewRoadEventBuilder(String type) {
+    public NewRoadEventBuilder(String type) {
         super(type);
     }
 
