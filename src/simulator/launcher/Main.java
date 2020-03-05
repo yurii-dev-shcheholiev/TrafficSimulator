@@ -1,6 +1,6 @@
 package simulator.launcher;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +12,12 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import simulator.control.Controller;
 import simulator.factories.*;
 import simulator.model.DequeuingStrategy;
 import simulator.model.Event;
 import simulator.model.LightSwitchingStrategy;
+import simulator.model.TrafficSimulator;
 
 public class Main {
 
@@ -23,6 +25,7 @@ public class Main {
 	private static String _inFile = null;
 	private static String _outFile = null;
 	private static Factory<Event> _eventsFactory = null;
+	private static int tics = 1;
 
 	private static void parseArgs(String[] args) {
 
@@ -100,13 +103,24 @@ public class Main {
 
 		List<Builder<Event>> ebs =new ArrayList<>();
 		ebs.add(new NewJunctionEventBuilder(lssFactory, dqsFactory) );
+
 		ebs.add(new NewCityRoadEventBuilder() );
 		ebs.add(new NewInterCityRoadEventBuilder() );
  		_eventsFactory = new BuilderBasedFactory<>(ebs);
 	}
 
 	private static void startBatchMode() throws IOException {
-		// TODO complete this method to start the simulation
+		TrafficSimulator trafficSimulator = new TrafficSimulator();
+		Controller controller = new Controller(trafficSimulator, _eventsFactory);
+
+		InputStream inputStream = new FileInputStream(_inFile);
+		controller.loadEvents(inputStream);
+
+		OutputStream outputStream = _outFile == null ? System.out: new FileOutputStream(_outFile);
+		controller.run(tics, outputStream);
+
+		inputStream.close();
+		outputStream.close();
 	}
 
 	private static void start(String[] args) throws IOException {

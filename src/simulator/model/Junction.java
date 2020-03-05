@@ -58,8 +58,8 @@ public class Junction extends SimulatedObject{
 	}
 	
 	
-	void enter(Road r, Vehicle v) {
-		r.enter(v);
+	void enter(Vehicle v) {
+		_mapQ.get(v.getRoad()).add(v);
 	}
 	
 	
