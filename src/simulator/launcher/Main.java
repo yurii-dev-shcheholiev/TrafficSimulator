@@ -25,7 +25,7 @@ public class Main {
 	private static String _inFile = null;
 	private static String _outFile = null;
 	private static Factory<Event> _eventsFactory = null;
-	private static int tics = 1;
+	private static int _tics;
 
 	private static void parseArgs(String[] args) {
 
@@ -41,6 +41,7 @@ public class Main {
 			parseHelpOption(line, cmdLineOptions);
 			parseInFileOption(line);
 			parseOutFileOption(line);
+			parseTickOption(line);
 
 			// if there are some remaining arguments, then something wrong is
 			// provided in the command line!
@@ -67,6 +68,7 @@ public class Main {
 		cmdLineOptions.addOption(
 				Option.builder("o").longOpt("output").hasArg().desc("Output file, where reports are written.").build());
 		cmdLineOptions.addOption(Option.builder("h").longOpt("help").desc("Print this message").build());
+        cmdLineOptions.addOption(Option.builder("t").longOpt("ticks").hasArg().desc("Ticks to the simulator’s main loop (defaultvalue is 10).").build());
 
 		return cmdLineOptions;
 	}
@@ -89,6 +91,13 @@ public class Main {
 	private static void parseOutFileOption(CommandLine line) throws ParseException {
 		_outFile = line.getOptionValue("o");
 	}
+
+	private static void parseTickOption(CommandLine line) throws ParseException {
+	    if (line.hasOption("t"))
+	        _tics = Integer.parseInt(line.getOptionValue("t"));
+	    else
+	        _tics = _timeLimitDefaultValue;
+    }
 
 	private static void initFactories() {
 		List<Builder<LightSwitchingStrategy>> lsbs = new ArrayList<>();
@@ -117,7 +126,7 @@ public class Main {
 		controller.loadEvents(inputStream);
 
 		OutputStream outputStream = _outFile == null ? System.out: new FileOutputStream(_outFile);
-		controller.run(tics, outputStream);
+		controller.run(_tics, outputStream);
 
 		inputStream.close();
 		outputStream.close();
