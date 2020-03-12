@@ -31,7 +31,7 @@ public class SetWeatherEventBuilder extends Builder<Event> {
             }
         }
         catch(NullPointerException | ClassCastException e) {
-            System.out.println("The JSON object is incorrect" + e.getMessage());
+            System.err.println("The JSON object is incorrect" + e.getMessage());
             return null;
         }
         return new SetWeatherEvent(time, pairs);

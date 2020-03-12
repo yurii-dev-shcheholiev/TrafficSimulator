@@ -112,9 +112,11 @@ public class Main {
 
 		List<Builder<Event>> ebs =new ArrayList<>();
 		ebs.add(new NewJunctionEventBuilder(lssFactory, dqsFactory) );
-
 		ebs.add(new NewCityRoadEventBuilder() );
 		ebs.add(new NewInterCityRoadEventBuilder() );
+		ebs.add(new NewVehicleEventBuilder() );
+		ebs.add(new SetWeatherEventBuilder() );
+		ebs.add(new SetContClassEventBuilder() );
  		_eventsFactory = new BuilderBasedFactory<>(ebs);
 	}
 

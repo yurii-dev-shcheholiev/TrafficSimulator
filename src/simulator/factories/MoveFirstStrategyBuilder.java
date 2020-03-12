@@ -12,7 +12,7 @@ public class MoveFirstStrategyBuilder extends Builder<DequeuingStrategy> {
 
     @Override
     protected DequeuingStrategy createTheInstance(JSONObject data) {
-        if (data != null)
+        if (data.length() != 0)
             return null;
         return new MoveFirstStrategy();
     }

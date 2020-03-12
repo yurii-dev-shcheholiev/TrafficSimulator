@@ -17,7 +17,7 @@ public class SetWeatherEvent extends Event {
     @Override
     void execute(RoadMap map) {
         for (Pair <String, Weather> w : _ws) {
-            if(map.getRoad(w.getFirst()) == null)
+            if (map.getRoad(w.getFirst()) == null)
                 throw new IllegalArgumentException("Road doesn't exist in the RoadMap");
             else
                 map.getRoad(w.getFirst()).setWeather(w.getSecond());

@@ -23,7 +23,7 @@ public class NewVehicleEventBuilder extends Builder<Event> {
         try {
             time = (data.getInt("time"));
             id = data.getString("id");
-            co2limit = data.getInt("co2limit");
+            co2limit = data.getInt("class");
             maxspeed = data.getInt("maxspeed");
             itinerary = new ArrayList<>();
             for (int i = 0; i < data.getJSONArray("itinerary").length(); i++) {

@@ -12,13 +12,15 @@ public class RoundRobinStrategyBuilder extends Builder<LightSwitchingStrategy>{
 
     @Override
     protected LightSwitchingStrategy createTheInstance(JSONObject data) {
-        int i = 0;
+
+        int timeslot = 1;
         try {
-            i = (data.getInt("timeslot"));
+            if (data.length() != 0)
+                timeslot = (data.getInt("timeslot"));
         } catch(NullPointerException | ClassCastException e) {
             System.out.println("The JSON object is incorrect" + e.getMessage());
             return null;
         }
-        return new RoundRobinStrategy(i);
+        return new RoundRobinStrategy(timeslot);
     }
 }
