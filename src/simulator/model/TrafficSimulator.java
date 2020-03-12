@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import simulator.misc.SortedArrayList;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class TrafficSimulator {
@@ -13,7 +14,12 @@ public class TrafficSimulator {
 
     public TrafficSimulator() {
         _time = 0;
-        _events = new SortedArrayList<>();
+        _events = new SortedArrayList<>(new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                return o1.getTime() - o2.getTime();
+            }
+        });
         _roadMap = new RoadMap();
     }
 
@@ -36,19 +42,14 @@ public class TrafficSimulator {
 
     public void reset() {
         _time = 0;
-        _events = new SortedArrayList<>();
-        _roadMap = new RoadMap();
+        _events.clear();
+        _roadMap.reset();
     }
 
     public JSONObject report() {
         JSONObject ob = new JSONObject();
         ob.put("time", _time);
-
-        JSONObject stateOb = new JSONObject();
-        stateOb.put("junctions", new JSONArray(_roadMap.getJunctions()));
-        stateOb.put("roads", new JSONArray(_roadMap.getRoads()));
-        stateOb.put("vehicles", new JSONArray(_roadMap.getVehicles()));
-        ob.put("state", stateOb);
+        ob.put("state", _roadMap.report());
         return ob;
     }
 }

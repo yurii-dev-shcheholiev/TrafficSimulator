@@ -37,10 +37,14 @@ public class Controller {
 
     public void run(int n, OutputStream out) {
         PrintStream p = new PrintStream(out);
+        JSONObject jo = new JSONObject();
+        JSONArray ja = new JSONArray();
         for (int i = 0; i < n; i++) {
             _trafSim.advance();
-            p.println(_trafSim.report().toString());
+            ja.put(_trafSim.report());
         }
+        jo.put("states", ja);
+        p.println(jo.toString());
     }
 
     public void reset() {

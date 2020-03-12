@@ -151,6 +151,7 @@ public class Main {
 		try {
 			start(args);
 		} catch (Exception e) {
+			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
 

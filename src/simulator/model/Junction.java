@@ -47,8 +47,7 @@ public class Junction extends SimulatedObject{
 		List<Vehicle> q = new LinkedList<>();
 		_queues.add(q);
 		_mapQ.put(r, q);
-	}//addInCommingRoad
-	
+	}
 	
 	void addOutGoingRoad(Road r) {
 		Junction j = r.getDestJunction();
@@ -56,17 +55,14 @@ public class Junction extends SimulatedObject{
 			throw new IllegalArgumentException("Other Roads go to Junction and is Not a Destination");
 		_outRoads.put(j, r);
 	}
-	
-	
+
 	void enter(Vehicle v) {
 		_mapQ.get(v.getRoad()).add(v);
 	}
-	
-	
+
 	Road roadTo(Junction j) {
 		return _outRoads.get(j);
 	}
-
 
 	@Override
 	void advance(int time) {
@@ -77,8 +73,8 @@ public class Junction extends SimulatedObject{
 			for (Vehicle v: l) {
 				v.moveToNextRoad();
 				q.remove(v);
-			}//foreach
-		}//if
+			}
+		}
 
 		//switch light
 		int g = _lsStrategy.chooseNextGreen( _inRoads, _queues ,_greenL, _lastSwitchT, time);
@@ -86,7 +82,7 @@ public class Junction extends SimulatedObject{
 		if ( _greenL != g ){
 			_greenL = g;
 			_lastSwitchT = time;
-		}//if
+		}
 	}
 
 
