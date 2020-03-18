@@ -82,18 +82,21 @@ public class Vehicle extends SimulatedObject {
             _road.exit(this);
 
         if (_itinerary.size() - 1 == _currentJ) {
-            _road = _itinerary.get(_currentJ).roadTo(_itinerary.get(_currentJ+1));
-            _road.enter(this);
-        } else {
             _status = VehicleStatus.ARRIVED;
             _road = null;
+
+        } else {
+            _road = _itinerary.get(_currentJ).roadTo(_itinerary.get(_currentJ+1));
+            _location = 0;
+            _status = VehicleStatus.TRAVELING;
+            _road.enter(this);
         }
     }
 
     @Override
     void advance(int time) {
-        if (_status == VehicleStatus.TRAVELING) {
-        	_currentSpeed = 0;
+        if (_status != VehicleStatus.TRAVELING) {
+
         	return;
         }
         
@@ -108,12 +111,13 @@ public class Vehicle extends SimulatedObject {
         _totalContamination += c;  
         _road.addContamination(c);
         //(c)
-        if (_location == _road.getLength())
+        if (_location == _road.getLength()) {
             _status = VehicleStatus.WAITING;
-        	_currentSpeed = 0;
+            _currentSpeed = 0;
 
-        	_currentJ++;
-        	_road.getDestJunction().enter(this);
+            _currentJ++;
+            _road.getDestJunction().enter(this);
+        }
     }
 
     @Override

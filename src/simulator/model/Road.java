@@ -1,5 +1,6 @@
 package simulator.model;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +109,7 @@ public abstract class Road extends SimulatedObject{
         _vehicles.sort((o1, o2) -> o2.getLocation() - o1.getLocation());
     }
 
-    //TODO
+
     @Override
     public JSONObject report() {
         JSONObject ob = new JSONObject();
@@ -116,7 +117,9 @@ public abstract class Road extends SimulatedObject{
         ob.put("speedlimit", _limitSpeed);
         ob.put("weather", _weather);
         ob.put("co2", _totalContamination);
-        ob.put("vehicles", _vehicles);
+        JSONArray ja = new JSONArray();
+        for (Vehicle v : _vehicles) ja.put(v.getId());
+        ob.put("vehicles", ja);
         return ob;
     }
 

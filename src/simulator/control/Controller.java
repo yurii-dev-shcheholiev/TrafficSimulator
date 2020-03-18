@@ -42,9 +42,10 @@ public class Controller {
         for (int i = 0; i < n; i++) {
             _trafSim.advance();
             ja.put(_trafSim.report());
+           // p.println(_trafSim.report().toString(5));
         }
         jo.put("states", ja);
-        p.println(jo);
+        p.println(jo.toString(5));
     }
 
     public void reset() {

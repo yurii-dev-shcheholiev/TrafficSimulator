@@ -24,6 +24,8 @@ public class NewVehicleEvent extends Event {
         for (String id: _itinerary) {
             tmp.add(map.getJunction(id));
         }
-        map.addVehicle(new Vehicle(_id, _maxSpeed, _contamination, tmp));
+        Vehicle v =  new Vehicle(_id, _maxSpeed, _contamination, tmp);
+        map.addVehicle(v);
+        v.moveToNextRoad();
     }
 }

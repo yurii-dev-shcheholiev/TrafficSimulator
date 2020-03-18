@@ -44,14 +44,14 @@ public class Junction extends SimulatedObject{
 		if (!(r.getDestJunction().equals(this)))
 			throw new IllegalArgumentException("Destination is not Equal to Current Junction");
 		_inRoads.add(r);
-		List<Vehicle> q = new LinkedList<>(r.getVehicles());
+		List<Vehicle> q = new LinkedList<>();
 		_queues.add(q);
 		_mapQ.put(r, q);
 	}
 	
 	void addOutGoingRoad(Road r) {
 		Junction j = r.getDestJunction();
-		if (_outRoads.containsKey(j) && !(j.equals(this)))
+		if (_outRoads.containsKey(j) || !(this.equals(r.getSrcJunction())) )
 			throw new IllegalArgumentException("Other Roads go to Junction and is Not a Destination");
 		_outRoads.put(j, r);
 	}
@@ -99,13 +99,16 @@ public class Junction extends SimulatedObject{
 		}
 
 		JSONArray queues = new JSONArray();
-		JSONObject qu = new JSONObject();
-		JSONArray vIds = new JSONArray();
 
 		for ( Road rx : _inRoads) {
+			JSONObject qu = new JSONObject();
+			JSONArray vIds = new JSONArray();
 			qu.put("roads", rx.getId());
-			vIds.put(_mapQ.get(rx));
-			qu.put("vehicles", vIds);
+//			for (Vehicle vx: rx.getVehicles() ) {
+//				vIds.put(vx.getId());
+//			}
+			qu.put("vehicles", _mapQ.get(rx));
+			//qu.put("vehicles", vIds);
 			queues.put(qu);
 		}
 
