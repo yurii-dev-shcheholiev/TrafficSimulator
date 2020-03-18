@@ -41,6 +41,9 @@ public abstract class Road extends SimulatedObject{
         _limitSpeed = maxSpeed;
         _totalContamination = 0;
         _vehicles = new ArrayList<Vehicle>();
+
+        _srcJunction.addOutGoingRoad(this);
+        _destJunction.addInCommingRoad(this);
     }
 
     public int getLength() {
@@ -65,6 +68,10 @@ public abstract class Road extends SimulatedObject{
 
     protected int getMaxSpeed() {
         return _maxSpeed;
+    }
+
+    public List<Vehicle> getVehicles() {
+        return _vehicles;
     }
 
     void setWeather(Weather weather) {
@@ -101,6 +108,7 @@ public abstract class Road extends SimulatedObject{
         _vehicles.sort((o1, o2) -> o2.getLocation() - o1.getLocation());
     }
 
+    //TODO
     @Override
     public JSONObject report() {
         JSONObject ob = new JSONObject();

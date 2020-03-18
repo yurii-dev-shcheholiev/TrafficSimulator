@@ -44,7 +44,7 @@ public class Controller {
             ja.put(_trafSim.report());
         }
         jo.put("states", ja);
-        p.println(jo.toString());
+        p.println(jo);
     }
 
     public void reset() {

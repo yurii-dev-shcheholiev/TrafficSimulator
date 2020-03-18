@@ -30,7 +30,8 @@ public class Vehicle extends SimulatedObject {
         _maxSpeed = maxSpeed;
         _contamination = contClass;
         _itinerary = Collections.unmodifiableList(new ArrayList<>(itinerary));
-        
+
+        _status = VehicleStatus.PENDING;
         _road = null;
         _totalContamination = 0;
         _totalDistance = 0;
@@ -84,13 +85,14 @@ public class Vehicle extends SimulatedObject {
             _road = _itinerary.get(_currentJ).roadTo(_itinerary.get(_currentJ+1));
             _road.enter(this);
         } else {
+            _status = VehicleStatus.ARRIVED;
             _road = null;
         }
     }
 
     @Override
     void advance(int time) {
-        if (!_status.equals(VehicleStatus.TRAVELING)) {
+        if (_status == VehicleStatus.TRAVELING) {
         	_currentSpeed = 0;
         	return;
         }
@@ -104,7 +106,7 @@ public class Vehicle extends SimulatedObject {
         //(b)
         int c = ((_location - _previousLocation) * _contamination);
         _totalContamination += c;  
-        
+        _road.addContamination(c);
         //(c)
         if (_location == _road.getLength())
             _status = VehicleStatus.WAITING;
@@ -125,7 +127,7 @@ public class Vehicle extends SimulatedObject {
     	ob.put("class", _contamination);
     	ob.put("status", _status);
 
-    	if (!(_status.equals(VehicleStatus.PENDING) || _status.equals(VehicleStatus.ARRIVED))) {
+    	if (_status != VehicleStatus.PENDING && _status != VehicleStatus.ARRIVED) {
     		ob.put("road", _road.getId());
     		ob.put("location", _location);
 		}

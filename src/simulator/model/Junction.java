@@ -44,7 +44,7 @@ public class Junction extends SimulatedObject{
 		if (!(r.getDestJunction().equals(this)))
 			throw new IllegalArgumentException("Destination is not Equal to Current Junction");
 		_inRoads.add(r);
-		List<Vehicle> q = new LinkedList<>();
+		List<Vehicle> q = new LinkedList<>(r.getVehicles());
 		_queues.add(q);
 		_mapQ.put(r, q);
 	}
@@ -66,13 +66,14 @@ public class Junction extends SimulatedObject{
 
 	@Override
 	void advance(int time) {
-		if (_greenL != -1){
+		if (_greenL != -1 && _queues.size() > 0) {
 			List<Vehicle> q =  _queues.get(_greenL);
-			List<Vehicle> l = _dqStrategy.dequeue(q);
-
-			for (Vehicle v: l) {
-				v.moveToNextRoad();
-				q.remove(v);
+			if (q.size() > 0) {
+				List<Vehicle> l = _dqStrategy.dequeue(q);
+				for (Vehicle v: l) {
+					v.moveToNextRoad();
+					q.remove(v);
+				}
 			}
 		}
 

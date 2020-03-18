@@ -48,12 +48,13 @@ public class TestExamples {
 		String outFile = path + "/" + info.getString("file") + ".expout.json";
 		Integer ticks = info.getInt("ticks");
 
-		System.out.println("-> Running: " + inFile);
+		_stdOut.println("-> Running: " + inFile);
 		try {
 			simulator.launcher.Main.main(new String[] { "-i", inFile, "-o", outFile, "-t", ticks.toString() });
-			System.out.println("OK!");
+			_stdOut.println("OK!");
 		} catch (Exception e) {
-			System.out.println("Failed (exception thrown).");
+			_stdOut.println("Failed (exception thrown).");
+			_stdErr.println(e.getMessage());
 		}
 
 	}
@@ -80,6 +81,7 @@ public class TestExamples {
 			}
 		} catch (Exception e) {
 			_stdOut.println("Failed (exception thrown).");
+			_stdErr.println(e.getMessage());
 		}
 
 	}

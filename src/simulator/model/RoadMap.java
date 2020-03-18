@@ -34,6 +34,7 @@ public class RoadMap {
             throw new IllegalArgumentException("Road is already in the RoadMap");
         if ( !(juncMap.containsValue(r.getSrcJunction()) && juncMap.containsValue(r.getDestJunction())) )
             throw new IllegalArgumentException("Junctions connected to this road are not in the RoadMap");
+
         roadList.add(r);
         roadMap.put(r.getId(), r);
     }
