@@ -106,7 +106,7 @@ public abstract class Road extends SimulatedObject{
             vehicle.setSpeed(calculateVehicleSpeed(vehicle));
             vehicle.advance(time);
         }
-        _vehicles.sort((o1, o2) -> o2.getLocation() - o1.getLocation());
+        _vehicles.sort((o1, o2) -> o2.getLocation() - o1.getLocation()); // descending
     }
 
 
@@ -118,7 +118,8 @@ public abstract class Road extends SimulatedObject{
         ob.put("weather", _weather);
         ob.put("co2", _totalContamination);
         JSONArray ja = new JSONArray();
-        for (Vehicle v : _vehicles) ja.put(v.getId());
+        for (Vehicle v : _vehicles)
+            ja.put(v.getId());
         ob.put("vehicles", ja);
         return ob;
     }

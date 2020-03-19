@@ -80,7 +80,7 @@ public class Junction extends SimulatedObject{
 		//switch light
 		int g = _lsStrategy.chooseNextGreen( _inRoads, _queues ,_greenL, _lastSwitchT, time);
 
-		if ( _greenL != g ){
+		if ( _greenL != g ) {
 			_greenL = g;
 			_lastSwitchT = time;
 		}
@@ -104,11 +104,11 @@ public class Junction extends SimulatedObject{
 			JSONObject qu = new JSONObject();
 			JSONArray vIds = new JSONArray();
 			qu.put("roads", rx.getId());
-//			for (Vehicle vx: rx.getVehicles() ) {
-//				vIds.put(vx.getId());
-//			}
-			qu.put("vehicles", _mapQ.get(rx));
-			//qu.put("vehicles", vIds);
+			for (Vehicle vx: _mapQ.get(rx) ) {
+				vIds.put(vx.getId());
+			}
+
+			qu.put("vehicles", vIds);
 			queues.put(qu);
 		}
 

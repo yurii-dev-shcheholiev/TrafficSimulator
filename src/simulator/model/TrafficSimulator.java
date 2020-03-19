@@ -1,10 +1,8 @@
 package simulator.model;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import simulator.misc.SortedArrayList;
 
-import java.util.Comparator;
 import java.util.List;
 
 public class TrafficSimulator {
@@ -14,12 +12,7 @@ public class TrafficSimulator {
 
     public TrafficSimulator() {
         _time = 0;
-        _events = new SortedArrayList<>(new Comparator<Event>() {
-            @Override
-            public int compare(Event o1, Event o2) {
-                return o1.getTime() - o2.getTime();
-            }
-        });
+        _events = new SortedArrayList<>();
         _roadMap = new RoadMap();
     }
 

@@ -65,7 +65,11 @@ public class Vehicle extends SimulatedObject {
     void setSpeed(int speed) {
         if (speed < 0)
             throw new IllegalArgumentException("Speed must be not negative");
-        _currentSpeed = Math.min(speed, _maxSpeed);
+        // TODO REVIEW
+        if (_status == VehicleStatus.WAITING)
+            _currentSpeed = 0;
+        else
+            _currentSpeed = Math.min(speed, _maxSpeed);
     }
 
     void setContClass(int contClass) {
@@ -76,7 +80,7 @@ public class Vehicle extends SimulatedObject {
 
     void moveToNextRoad() {
         if (_status != VehicleStatus.PENDING && _status != VehicleStatus.WAITING)
-            throw new IllegalArgumentException("Vehicle status must be PENDING");
+            throw new IllegalArgumentException("Vehicle status must be PENDING or WAITING");
 
         if (_road != null)
             _road.exit(this);
@@ -84,10 +88,12 @@ public class Vehicle extends SimulatedObject {
         if (_itinerary.size() - 1 == _currentJ) {
             _status = VehicleStatus.ARRIVED;
             _road = null;
-
+            _location = 0;
+            _currentSpeed = 0;
         } else {
             _road = _itinerary.get(_currentJ).roadTo(_itinerary.get(_currentJ+1));
             _location = 0;
+            _currentSpeed = 0;
             _status = VehicleStatus.TRAVELING;
             _road.enter(this);
         }
@@ -96,18 +102,16 @@ public class Vehicle extends SimulatedObject {
     @Override
     void advance(int time) {
         if (_status != VehicleStatus.TRAVELING) {
-
         	return;
         }
         
-        int _previousLocation = _location;
+        int previousLocation = _location;
         
         //(a)
-        _location = Math.min(_previousLocation + _currentSpeed, _road.getLength());
-        _totalDistance += _location;
-        
+        _location = Math.min(previousLocation + _currentSpeed, _road.getLength());
+        _totalDistance += (_location - previousLocation);
         //(b)
-        int c = ((_location - _previousLocation) * _contamination);
+        int c = ((_location - previousLocation) * _contamination);
         _totalContamination += c;  
         _road.addContamination(c);
         //(c)
