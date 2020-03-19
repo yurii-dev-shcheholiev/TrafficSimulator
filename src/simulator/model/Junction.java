@@ -26,7 +26,7 @@ public class Junction extends SimulatedObject{
 		if(xCoor < 0 || yCoor < 0)
 			throw new IllegalArgumentException("The x and y coordinates must be either 0 or of positive value");
 
-		_greenL = 0;
+		_greenL = -1;
 		_lastSwitchT = 0;
 
 		_lsStrategy = lsStrategy;
@@ -103,7 +103,7 @@ public class Junction extends SimulatedObject{
 		for ( Road rx : _inRoads) {
 			JSONObject qu = new JSONObject();
 			JSONArray vIds = new JSONArray();
-			qu.put("roads", rx.getId());
+			qu.put("road", rx.getId());
 			for (Vehicle vx: _mapQ.get(rx) ) {
 				vIds.put(vx.getId());
 			}
