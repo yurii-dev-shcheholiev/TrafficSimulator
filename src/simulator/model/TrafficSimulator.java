@@ -1,11 +1,13 @@
 package simulator.model;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import org.json.JSONObject;
 import simulator.misc.SortedArrayList;
 
 import java.util.List;
 
-public class TrafficSimulator {
+public class TrafficSimulator implements Observable<TrafficSimObserver> {
     private RoadMap _roadMap;
     private List<Event> _events;
     private int _time;
@@ -44,5 +46,15 @@ public class TrafficSimulator {
         ob.put("time", _time);
         ob.put("state", _roadMap.report());
         return ob;
+    }
+
+    @Override
+    public void addListener(InvalidationListener listener) {
+
+    }
+
+    @Override
+    public void removeListener(InvalidationListener listener) {
+
     }
 }
