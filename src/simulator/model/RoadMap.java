@@ -1,5 +1,6 @@
 package simulator.model;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -22,23 +23,24 @@ public class RoadMap {
     }
 
     void addJunction(Junction j) {
-        if (juncMap.get(j.getId()).equals(j))
+        if (juncMap.get(j.getId()) == j)
             throw new IllegalArgumentException("Junction is already in the RoadMap");
         juncList.add(j);
         juncMap.put(j.getId(), j);
     }
 
     void addRoad(Road r) {
-        if (roadMap.get(r.getId()).equals(r))
+        if (roadMap.get(r.getId()) == r)
             throw new IllegalArgumentException("Road is already in the RoadMap");
         if ( !(juncMap.containsValue(r.getSrcJunction()) && juncMap.containsValue(r.getDestJunction())) )
             throw new IllegalArgumentException("Junctions connected to this road are not in the RoadMap");
+
         roadList.add(r);
         roadMap.put(r.getId(), r);
     }
 
     void addVehicle(Vehicle v) {
-        if (vehicleMap.get(v.getId()).equals(v))
+        if (vehicleMap.get(v.getId()) == v)
             throw new IllegalArgumentException("Vehicle is already in the RoadMap");
         for (Junction j : v.getItinerary()) {
             if (!juncMap.containsValue(j))
@@ -83,15 +85,25 @@ public class RoadMap {
 
     public JSONObject report() {
         JSONObject ob = new JSONObject();
+
+        JSONArray junc = new JSONArray();
         for (Junction j : juncList) {
-            ob.put("junctions", j.report());
+            junc.put(j.report());
         }
+        ob.put("junctions", junc);
+
+        JSONArray roads = new JSONArray();
         for (Road r : roadList) {
-            ob.put("roads", r.report());
+            roads.put(r.report());
         }
+        ob.put("roads", roads);
+
+        JSONArray veh = new JSONArray();
         for (Vehicle v : vehicleList) {
-            ob.put("vehicles", v.report());
+            veh.put(v.report());
         }
+        ob.put("vehicles", veh);
+
         return ob;
     }
 }

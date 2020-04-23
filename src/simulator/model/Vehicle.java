@@ -1,7 +1,6 @@
 package simulator.model;
 
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +16,7 @@ public class Vehicle extends SimulatedObject {
     private int _contamination;
     private int _totalContamination;
     private int _totalDistance;
+    private int _currentJ;
 
     Vehicle(String id, int maxSpeed, int contClass, List<Junction> itinerary) {
         super(id);
@@ -30,10 +30,12 @@ public class Vehicle extends SimulatedObject {
         _maxSpeed = maxSpeed;
         _contamination = contClass;
         _itinerary = Collections.unmodifiableList(new ArrayList<>(itinerary));
-        
+
+        _status = VehicleStatus.PENDING;
         _road = null;
         _totalContamination = 0;
         _totalDistance = 0;
+        _currentJ = 0;
     }
 
     int getLocation() {
@@ -63,7 +65,11 @@ public class Vehicle extends SimulatedObject {
     void setSpeed(int speed) {
         if (speed < 0)
             throw new IllegalArgumentException("Speed must be not negative");
-        _currentSpeed = Math.min(speed, _maxSpeed);
+        // TODO REVIEW
+        if (_status == VehicleStatus.WAITING)
+            _currentSpeed = 0;
+        else
+            _currentSpeed = Math.min(speed, _maxSpeed);
     }
 
     void setContClass(int contClass) {
@@ -73,35 +79,49 @@ public class Vehicle extends SimulatedObject {
     }
 
     void moveToNextRoad() {
-        //TODO
+        if (_status != VehicleStatus.PENDING && _status != VehicleStatus.WAITING)
+            throw new IllegalArgumentException("Vehicle status must be PENDING or WAITING");
+
+        if (_road != null)
+            _road.exit(this);
+
+        if (_itinerary.size() - 1 == _currentJ) {
+            _status = VehicleStatus.ARRIVED;
+            _road = null;
+            _location = 0;
+            _currentSpeed = 0;
+        } else {
+            _road = _itinerary.get(_currentJ).roadTo(_itinerary.get(_currentJ+1));
+            _location = 0;
+            _currentSpeed = 0;
+            _status = VehicleStatus.TRAVELING;
+            _road.enter(this);
+        }
     }
 
     @Override
     void advance(int time) {
-        if (!_status.equals(VehicleStatus.TRAVELING)) {
-        	_currentSpeed = 0;
+        if (_status != VehicleStatus.TRAVELING) {
         	return;
         }
         
-        int _previousLocation = _location;
+        int previousLocation = _location;
         
         //(a)
-        _location = Math.min(_previousLocation + _currentSpeed, _road.getLength());
-        
-        _totalDistance += _location;
-        
+        _location = Math.min(previousLocation + _currentSpeed, _road.getLength());
+        _totalDistance += (_location - previousLocation);
         //(b)
-        
-        int c = ((_location - _previousLocation) * _contamination);
+        int c = ((_location - previousLocation) * _contamination);
         _totalContamination += c;  
-        
+        _road.addContamination(c);
         //(c)
-        if (_location == _road.getLength())
+        if (_location == _road.getLength()) {
             _status = VehicleStatus.WAITING;
-        	_currentSpeed = 0;
-//            _itinerary;  JUNCTION
-        
-        //TODO
+            _currentSpeed = 0;
+
+            _currentJ++;
+            _road.getDestJunction().enter(this);
+        }
     }
 
     @Override
@@ -114,10 +134,8 @@ public class Vehicle extends SimulatedObject {
     	ob.put("co2", _totalContamination);
     	ob.put("class", _contamination);
     	ob.put("status", _status);
-    	
-    	
-    	if (!(_status.equals(VehicleStatus.PENDING) || _status.equals(VehicleStatus.ARRIVED))) {
-    		
+
+    	if (_status != VehicleStatus.PENDING && _status != VehicleStatus.ARRIVED) {
     		ob.put("road", _road.getId());
     		ob.put("location", _location);
 		}

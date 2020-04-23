@@ -10,26 +10,24 @@ public class CityRoad extends Road {
         int x;
         switch (getWeather()) {
             case WINDY:
-                x = 10;
-                break;
             case STORM:
-                x = 15;
+                x = 10;
                 break;
             default:
                 x = 2;
         }
 
-        if (_totalContamination >= x)
-            _totalContamination -= x;
+        _totalContamination = Math.max(0, _totalContamination - x);
     }
 
     @Override
     void updateSpeedLimit() {
         // speed limit does not change and = max speed
+        _limitSpeed = getMaxSpeed();
     }
 
     @Override
     int calculateVehicleSpeed(Vehicle v) {
-        return (int)( ((11.0 - v.getContClass()) / 11.0) * _limitSpeed);
+        return (int) (((11.0 - v.getContClass()) / 11.0) * _limitSpeed);
     }
 }

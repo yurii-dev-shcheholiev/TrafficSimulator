@@ -1,6 +1,8 @@
 package simulator.model;
 
 import java.util.*;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Junction extends SimulatedObject{
@@ -18,13 +20,13 @@ public class Junction extends SimulatedObject{
 	Junction(String id, LightSwitchingStrategy lsStrategy, DequeuingStrategy dqStrategy, int xCoor, int yCoor ) {
 		super(id);
 		
-		if (lsStrategy.equals(null) && dqStrategy.equals(null)) 
+		if (lsStrategy == null || dqStrategy == null)
 			throw new IllegalArgumentException("The Light Switch and the Dequeing must not be empty");
 		
-		if(xCoor < 0 && yCoor < 0) 
+		if(xCoor < 0 || yCoor < 0)
 			throw new IllegalArgumentException("The x and y coordinates must be either 0 or of positive value");
 
-		_greenL = 0;
+		_greenL = -1;
 		_lastSwitchT = 0;
 
 		_lsStrategy = lsStrategy;
@@ -45,46 +47,43 @@ public class Junction extends SimulatedObject{
 		List<Vehicle> q = new LinkedList<>();
 		_queues.add(q);
 		_mapQ.put(r, q);
-	}//addInCommingRoad
-	
+	}
 	
 	void addOutGoingRoad(Road r) {
 		Junction j = r.getDestJunction();
-		if (_outRoads.containsKey(j) && !(j.equals(this)))
+		if (_outRoads.containsKey(j) || !(this.equals(r.getSrcJunction())) )
 			throw new IllegalArgumentException("Other Roads go to Junction and is Not a Destination");
 		_outRoads.put(j, r);
 	}
-	
-	
-	void enter(Road r, Vehicle v) {
-		r.enter(v);
+
+	void enter(Vehicle v) {
+		_mapQ.get(v.getRoad()).add(v);
 	}
-	
-	
+
 	Road roadTo(Junction j) {
 		return _outRoads.get(j);
 	}
 
-
 	@Override
 	void advance(int time) {
-		if (_greenL != -1){
+		if (_greenL != -1 && _queues.size() > 0) {
 			List<Vehicle> q =  _queues.get(_greenL);
-			List<Vehicle> l = _dqStrategy.dequeue(q);
-
-			for (Vehicle v: l) {
-				v.moveToNextRoad();
-				q.remove(v);
-			}//foreach
-		}//if
+			if (q.size() > 0) {
+				List<Vehicle> l = _dqStrategy.dequeue(q);
+				for (Vehicle v: l) {
+					v.moveToNextRoad();
+					q.remove(v);
+				}
+			}
+		}
 
 		//switch light
 		int g = _lsStrategy.chooseNextGreen( _inRoads, _queues ,_greenL, _lastSwitchT, time);
 
-		if ( _greenL != g ){
+		if ( _greenL != g ) {
 			_greenL = g;
 			_lastSwitchT = time;
-		}//if
+		}
 	}
 
 
@@ -99,16 +98,21 @@ public class Junction extends SimulatedObject{
 			j.put("green", "none");
 		}
 
-		JSONObject qu = new JSONObject();
+		JSONArray queues = new JSONArray();
+
 		for ( Road rx : _inRoads) {
-			qu.put("roads", rx.getId());
-
-			for (Vehicle vx : _mapQ.get(rx)) {
-				qu.put("vehicles", vx.getId());
+			JSONObject qu = new JSONObject();
+			JSONArray vIds = new JSONArray();
+			qu.put("road", rx.getId());
+			for (Vehicle vx: _mapQ.get(rx) ) {
+				vIds.put(vx.getId());
 			}
-		}
-		j.put("queues", qu);
 
+			qu.put("vehicles", vIds);
+			queues.put(qu);
+		}
+
+		j.put("queues", queues);
 		return j;
 	}
-}//End
+}

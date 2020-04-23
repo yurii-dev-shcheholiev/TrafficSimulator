@@ -5,14 +5,10 @@ import java.util.List;
 
 public class MoveFirstStrategy implements DequeuingStrategy {
 
-	public MoveFirstStrategy() {
-		// TODO Auto-generated constructor stub
-	}
-	
 	@Override
 	public List<Vehicle> dequeue(List<Vehicle> q) {
 		
-		List<Vehicle> l = new ArrayList<Vehicle>();
+		List<Vehicle> l = new ArrayList<>();
 		l.add(q.get(0));
 		
 		return l;

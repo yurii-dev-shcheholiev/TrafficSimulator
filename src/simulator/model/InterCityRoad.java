@@ -28,7 +28,7 @@ public class InterCityRoad extends Road {
             default:
                 x = 0;
         }
-        _totalContamination = (int)( ((100 - x) / 100) * _totalContamination);
+        _totalContamination = (int)( ((100.0 - x) / 100.0) * _totalContamination);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class InterCityRoad extends Road {
     @Override
     int calculateVehicleSpeed(Vehicle v) {
         if (getWeather() == Weather.STORM)
-            return (int)( _limitSpeed * 0.8);
+            return (int) ( _limitSpeed * 0.8);
         else
             return _limitSpeed;
     }
