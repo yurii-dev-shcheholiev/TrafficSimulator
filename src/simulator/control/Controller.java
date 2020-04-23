@@ -5,13 +5,15 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import simulator.factories.Factory;
 import simulator.model.Event;
+import simulator.model.Observable;
+import simulator.model.TrafficSimObserver;
 import simulator.model.TrafficSimulator;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-public class Controller {
+public class Controller implements Observable<TrafficSimObserver>{
     private TrafficSimulator _trafSim;
     private Factory<Event> _evFactory;
 
@@ -42,7 +44,6 @@ public class Controller {
         for (int i = 0; i < n; i++) {
             _trafSim.advance();
             ja.put(_trafSim.report());
-           // p.println(_trafSim.report().toString(5));
         }
         jo.put("states", ja);
         p.println(jo.toString(5));
@@ -50,5 +51,19 @@ public class Controller {
 
     public void reset() {
         _trafSim.reset();
+    }
+
+    @Override
+    public void addObserver(TrafficSimObserver o) {
+        _trafSim.addObserver(o);
+    }
+
+    @Override
+    public void removeObserver(TrafficSimObserver o) {
+        _trafSim.removeObserver(o);
+    }
+
+    public void addEvent(Event e) {
+        _trafSim.addEvent(e);
     }
 }

@@ -115,4 +115,12 @@ public class Junction extends SimulatedObject{
 		j.put("queues", queues);
 		return j;
 	}
+
+	public int getX() {
+		return _xCoor;
+	}
+
+	public int getY() {
+		return _yCoor;
+	}
 }

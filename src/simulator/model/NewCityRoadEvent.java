@@ -10,4 +10,9 @@ public class NewCityRoadEvent extends NewRoadEvent {
     void execute(RoadMap map) {
         map.addRoad(new CityRoad(_id, map.getJunction(_srcJunction), map.getJunction(_destJunction), _maxSpeed, _contLimit, _length, _weather));
     }
+
+    @Override
+    public String toString() {
+        return "New City Road \'" + _id + "\'";
+    }
 }
