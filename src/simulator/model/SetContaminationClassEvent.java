@@ -23,6 +23,10 @@ public class SetContaminationClassEvent extends Event {
             else
                 map.getVehicle(c.getFirst()).setContClass(c.getSecond());
         }//foreach
+    }
 
+    @Override
+    public String toString() {
+        return "Set Contamination \'" + _cs + "\'";
     }
 }

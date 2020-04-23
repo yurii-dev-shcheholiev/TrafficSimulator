@@ -23,4 +23,9 @@ public class SetWeatherEvent extends Event {
                 map.getRoad(w.getFirst()).setWeather(w.getSecond());
         }//foreach
     }
+
+    @Override
+    public String toString() {
+        return "Set Weather \'" + _ws + "\'";
+    }
 }
