@@ -35,9 +35,9 @@ public class MainWindow extends JFrame {
         viewsPanel.add(mapsPanel);
 
         //tables
-        JPanel eventsView = createViewPanel(new JTable(new EventsTableModel(_ctrl)), "Events");
-        eventsView.setPreferredSize(new Dimension(500, 200));
-        tablesPanel.add(eventsView);
+//        JPanel eventsView = createViewPanel(new JTable(new EventsTableModel(_ctrl)), "Events");
+//        eventsView.setPreferredSize(new Dimension(500, 200));
+//        tablesPanel.add(eventsView);
 
         //TODO add other tables
 
