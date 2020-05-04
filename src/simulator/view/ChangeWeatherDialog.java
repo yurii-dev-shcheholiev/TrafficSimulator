@@ -1,25 +1,25 @@
 package simulator.view;
 
-import simulator.model.SetContaminationClassEvent;
+import simulator.model.Road;
 import simulator.model.Vehicle;
+import simulator.model.Weather;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class ChangeCO2ClassDialog extends JDialog {
+public class ChangeWeatherDialog extends JDialog {
 
     private int _status;
-    private SetContaminationClassEvent _co2Event;
 
     private JLabel _descLabel;
-    private JComboBox<Vehicle> _vehicles;
-    private DefaultComboBoxModel<Vehicle> _vehicleModel;
-    private JComboBox<Integer> _co2classes;
-    private DefaultComboBoxModel<Integer> _co2Model;
+    private JComboBox<Road> _roads;
+    private DefaultComboBoxModel<Road> _roadModel;
+    private JComboBox<Weather> _weather;
+    private DefaultComboBoxModel<Weather> _weatherModel;
     private JComboBox<Integer> _ticks;
     private DefaultComboBoxModel<Integer> _tickModel;
 
-    ChangeCO2ClassDialog() {
+    ChangeWeatherDialog() {
         super();
         initGUI();
     }
@@ -27,7 +27,8 @@ public class ChangeCO2ClassDialog extends JDialog {
     private void initGUI() {
         _status = 0;
 
-        setTitle("Change CO2 Class");
+        setTitle("Change Road Weather");
+
         //Main Panel
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -53,23 +54,23 @@ public class ChangeCO2ClassDialog extends JDialog {
         mainPanel.add(buttonsPanel);
 
         //Label
-        _descLabel = new JLabel("<html>Schedule an event to change the CO2 class of a vehicle after a <br>given number of simulation ticks from now.</html>");
+        _descLabel = new JLabel("<html>Schedule an event to change the weather of a road after a <br>given number of simulation ticks from now.</html>");
         _descLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         topPanel.add(_descLabel, BorderLayout.PAGE_START);
 
         //Vehicle comboBox
-        JLabel vLabel = new JLabel("Vehicle:");
-        _vehicleModel = new DefaultComboBoxModel<>();
-        _vehicles = new JComboBox<Vehicle>(_vehicleModel);
-        boxesPanel.add(vLabel);
-        boxesPanel.add(_vehicles);
+        JLabel rLabel = new JLabel("Road:");
+        _roadModel = new DefaultComboBoxModel<>();
+        _roads = new JComboBox<Road>(_roadModel);
+        boxesPanel.add(rLabel);
+        boxesPanel.add(_roads);
 
         //CO2 comboBox
-        JLabel co2Label = new JLabel("CO2 Class:");
-        _co2Model = new DefaultComboBoxModel<>();
-        _co2classes = new JComboBox<Integer>(_co2Model);
-        boxesPanel.add(co2Label);
-        boxesPanel.add(_co2classes);
+        JLabel weatherLabel = new JLabel("Weather:");
+        _weatherModel = new DefaultComboBoxModel<>();
+        _weather = new JComboBox<Weather>(_weatherModel);
+        boxesPanel.add(weatherLabel);
+        boxesPanel.add(_weather);
 
         //Tics comboBox
         JLabel ticksLabel = new JLabel("Ticks:");
@@ -82,18 +83,18 @@ public class ChangeCO2ClassDialog extends JDialog {
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(e -> {
             _status = 0;
-            ChangeCO2ClassDialog.this.setVisible(false);
+            ChangeWeatherDialog.this.setVisible(false);
         });
         buttonsPanel.add(cancelButton);
 
         //Ok button
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
-            if (_vehicleModel.getSelectedItem() != null
-                    && _co2Model.getSelectedItem() != null
+            if (_roadModel.getSelectedItem() != null
+                    && _weatherModel.getSelectedItem() != null
                     && _tickModel.getSelectedItem() != null) {
                 _status = 1;
-                ChangeCO2ClassDialog.this.setVisible(false);
+                ChangeWeatherDialog.this.setVisible(false);
             }
         });
         buttonsPanel.add(okButton);
