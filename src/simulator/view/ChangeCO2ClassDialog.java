@@ -1,10 +1,13 @@
 package simulator.view;
 
+import simulator.misc.Pair;
 import simulator.model.SetContaminationClassEvent;
 import simulator.model.Vehicle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChangeCO2ClassDialog extends JDialog {
 
@@ -12,8 +15,8 @@ public class ChangeCO2ClassDialog extends JDialog {
     private SetContaminationClassEvent _co2Event;
 
     private JLabel _descLabel;
-    private JComboBox<Vehicle> _vehicles;
-    private DefaultComboBoxModel<Vehicle> _vehicleModel;
+    private JComboBox<String> _vehicles;
+    private DefaultComboBoxModel<String> _vehicleModel;
     private JComboBox<Integer> _co2classes;
     private DefaultComboBoxModel<Integer> _co2Model;
     private JComboBox<Integer> _ticks;
@@ -60,7 +63,7 @@ public class ChangeCO2ClassDialog extends JDialog {
         //Vehicle comboBox
         JLabel vLabel = new JLabel("Vehicle:");
         _vehicleModel = new DefaultComboBoxModel<>();
-        _vehicles = new JComboBox<Vehicle>(_vehicleModel);
+        _vehicles = new JComboBox<String>(_vehicleModel);
         boxesPanel.add(vLabel);
         boxesPanel.add(_vehicles);
 
@@ -75,6 +78,7 @@ public class ChangeCO2ClassDialog extends JDialog {
         JLabel ticksLabel = new JLabel("Ticks:");
         _tickModel = new DefaultComboBoxModel<>();
         _ticks = new JComboBox<Integer>(_tickModel);
+        _ticks.setEditable(true);
         boxesPanel.add(ticksLabel);
         boxesPanel.add(_ticks);
 
@@ -103,8 +107,32 @@ public class ChangeCO2ClassDialog extends JDialog {
         pack();
         setResizable(false);
         setModal(true);
-        setVisible(true);
+        setVisible(false);
     }
 
-    //TODO create methods to get Lists for ComboBoxes + create methods to return the new selected values
+
+    //TODO find out why passed argument List<Vehicle> vehicles is empty
+    public int open(List<Vehicle> vehicles) {
+        System.out.println(vehicles.size());
+        _vehicleModel.removeAllElements();
+        for (Vehicle v : vehicles) {
+            _vehicleModel.addElement(v.getId());
+        }
+        System.out.println(_vehicleModel.getSize());
+        for (int i = 0; i < 10; i++) {
+            _co2Model.addElement(i);
+        }
+
+        for (int i = 0; i < 50; i++) {
+            _tickModel.addElement(i);
+        }
+        setVisible(true);
+        return _status;
+    }
+
+    public SetContaminationClassEvent getNewCO2Event() {
+        List<Pair<String, Integer>> tmp = new ArrayList<Pair<String, Integer>>();
+        tmp.add(new Pair<String, Integer>((String) _vehicleModel.getSelectedItem(), (Integer) _co2Model.getSelectedItem()));
+        return new SetContaminationClassEvent((Integer) _tickModel.getSelectedItem(), tmp);
+    }
 }

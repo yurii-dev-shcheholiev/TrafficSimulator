@@ -1,19 +1,20 @@
 package simulator.view;
 
-import simulator.model.Road;
-import simulator.model.Vehicle;
-import simulator.model.Weather;
+import simulator.misc.Pair;
+import simulator.model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChangeWeatherDialog extends JDialog {
 
     private int _status;
 
     private JLabel _descLabel;
-    private JComboBox<Road> _roads;
-    private DefaultComboBoxModel<Road> _roadModel;
+    private JComboBox<String> _roads;
+    private DefaultComboBoxModel<String> _roadModel;
     private JComboBox<Weather> _weather;
     private DefaultComboBoxModel<Weather> _weatherModel;
     private JComboBox<Integer> _ticks;
@@ -61,7 +62,7 @@ public class ChangeWeatherDialog extends JDialog {
         //Vehicle comboBox
         JLabel rLabel = new JLabel("Road:");
         _roadModel = new DefaultComboBoxModel<>();
-        _roads = new JComboBox<Road>(_roadModel);
+        _roads = new JComboBox<String>(_roadModel);
         boxesPanel.add(rLabel);
         boxesPanel.add(_roads);
 
@@ -104,8 +105,32 @@ public class ChangeWeatherDialog extends JDialog {
         pack();
         setResizable(false);
         setModal(true);
-        setVisible(true);
+        setVisible(false);
     }
 
-    //TODO create methods to get Lists for ComboBoxes + create methods to return the new selected values
+    //TODO find out why passed argument List<Road> roads is empty
+    public int open(List<Road> roads) {
+        System.out.println(roads.size());
+        _roadModel.removeAllElements();
+        for (Road r : roads) {
+            _roadModel.addElement(r.getId());
+        }
+        System.out.println(_roadModel.getSize());
+        for (Weather w : Weather.values()) {
+            _weatherModel.addElement(w);
+        }
+
+        for (int i = 0; i < 50; i++) {
+            _tickModel.addElement(i);
+        }
+        // launch the window
+        setVisible(true);
+        return _status;
+    }
+
+    public SetWeatherEvent getNewWeatherEvent() {
+        List<Pair<String, Weather>> tmp = new ArrayList<Pair<String, Weather>>();
+        tmp.add(new Pair<String, Weather>((String) _roadModel.getSelectedItem(), (Weather) _weatherModel.getSelectedItem()));
+        return new SetWeatherEvent((Integer) _tickModel.getSelectedItem(), tmp);
+    }
 }

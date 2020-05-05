@@ -13,6 +13,8 @@ import java.util.List;
 public class ControlPanel extends JPanel implements TrafficSimObserver {
 
     private Controller _ctrl;
+    private RoadMap _roadMap;
+    private int _time;
 
     private JButton _loadEventFileButton;
     private JFileChooser _eventFileChooser;
@@ -28,8 +30,9 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
     ControlPanel(Controller ctrl) {
         super();
         _ctrl = ctrl;
-
         initGUI();
+
+        _ctrl.addObserver(this);
     }
 
     private void initGUI() {
@@ -63,8 +66,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _changeCO2Button.setToolTipText("Change CO2 class of a vehicle");
         _changeCO2Button.addActionListener(e -> {
             _changeCO2Dialog = new ChangeCO2ClassDialog();
-
-            _ctrl.addEvent(null);
+            if (_changeCO2Dialog.open(_roadMap.getVehicles()) == 1)
+                _ctrl.addEvent(_changeCO2Dialog.getNewCO2Event());
         });
         add(_changeCO2Button);
 
@@ -73,6 +76,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _changeWeatherButton.setToolTipText("Change Weather of a road");
         _changeWeatherButton.addActionListener(e -> {
             _changeWeatherDialog = new ChangeWeatherDialog();
+            if (_changeWeatherDialog.open(_roadMap.getRoads()) == 1)
+                _ctrl.addEvent(_changeWeatherDialog.getNewWeatherEvent());
         });
         add(_changeWeatherButton);
 
@@ -80,7 +85,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _runButton = new JButton(new ImageIcon(iconsPath + "run.png"));
         _runButton.setToolTipText("Run the simulation");
         _runButton.addActionListener(e -> {
-
+            //TODO
         });
         add(_runButton);
 
@@ -88,21 +93,31 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _stopButton = new JButton(new ImageIcon(iconsPath + "stop.png"));
         _stopButton.setToolTipText("Stop the simulation");
         _stopButton.addActionListener(e -> {
-
+            //TODO
         });
         add(_stopButton);
 
         //Ticks
-
+        //TODO
 
         //Exit
         _exitButton = new JButton(new ImageIcon(iconsPath + "exit.png"));
         _exitButton.setToolTipText("Exit the simulator");
         _exitButton.addActionListener(e -> {
-            System.exit(0);
+            quit();
         });
         add(_exitButton);
 
+    }
+
+    private void quit() {
+        int n = JOptionPane.showOptionDialog(this,
+                "Are sure you want to quit?","Quit",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null,null, null);
+        if (n == 0) {
+             System.exit(0);
+        }
     }
 
     @Override
@@ -127,7 +142,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
 
     @Override
     public void onRegister(RoadMap map, List<Event> events, int time) {
-
+        _roadMap = map;
+        _time = time;
     }
 
     @Override
