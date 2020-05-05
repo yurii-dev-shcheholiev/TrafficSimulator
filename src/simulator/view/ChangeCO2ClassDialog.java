@@ -12,6 +12,7 @@ import java.util.List;
 public class ChangeCO2ClassDialog extends JDialog {
 
     private int _status;
+    private int _time;
 
     private JLabel _descLabel;
     private JComboBox<String> _vehicles;
@@ -110,12 +111,12 @@ public class ChangeCO2ClassDialog extends JDialog {
         setVisible(false);
     }
 
-    public int open(List<Vehicle> vehicles) {
+    public int open(int time, List<Vehicle> vehicles) {
+        _time = time;
         _vehicleModel.removeAllElements();
         for (Vehicle v : vehicles) {
             _vehicleModel.addElement(v.getId());
         }
-
         for (int i = 0; i < 10; i++) {
             _co2Model.addElement(i);
         }
@@ -127,6 +128,6 @@ public class ChangeCO2ClassDialog extends JDialog {
     public SetContaminationClassEvent getNewCO2Event() {
         List<Pair<String, Integer>> tmp = new ArrayList<Pair<String, Integer>>();
         tmp.add(new Pair<String, Integer>((String) _vehicleModel.getSelectedItem(), (Integer) _co2Model.getSelectedItem()));
-        return new SetContaminationClassEvent((Integer) _ticks.getValue(), tmp);
+        return new SetContaminationClassEvent(_time + (Integer)_ticks.getValue(), tmp);
     }
 }

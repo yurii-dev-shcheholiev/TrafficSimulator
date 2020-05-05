@@ -11,6 +11,7 @@ import java.util.List;
 public class ChangeWeatherDialog extends JDialog {
 
     private int _status;
+    private int _time;
 
     private JLabel _descLabel;
     private JComboBox<String> _roads;
@@ -109,7 +110,8 @@ public class ChangeWeatherDialog extends JDialog {
         setVisible(false);
     }
 
-    public int open(List<Road> roads) {
+    public int open(int time, List<Road> roads) {
+        _time = time;
         _roadModel.removeAllElements();
         for (Road r : roads) {
             _roadModel.addElement(r.getId());
@@ -117,7 +119,6 @@ public class ChangeWeatherDialog extends JDialog {
         for (Weather w : Weather.values()) {
             _weatherModel.addElement(w);
         }
-
         // launch the window
         setVisible(true);
         return _status;
@@ -126,6 +127,6 @@ public class ChangeWeatherDialog extends JDialog {
     public SetWeatherEvent getNewWeatherEvent() {
         List<Pair<String, Weather>> tmp = new ArrayList<Pair<String, Weather>>();
         tmp.add(new Pair<String, Weather>((String) _roadModel.getSelectedItem(), (Weather) _weatherModel.getSelectedItem()));
-        return new SetWeatherEvent((Integer) _ticks.getValue(), tmp);
+        return new SetWeatherEvent(_time + (Integer)_ticks.getValue(), tmp);
     }
 }

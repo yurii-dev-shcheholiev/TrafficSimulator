@@ -39,7 +39,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
     }
 
     private void initGUI() {
-        //TODO add lines or additional panels to group buttons
+        //TODO add lines or additional panels to group buttons, fix JSeparators
 
         // Create a relative path to resources/icons
         String absolutePath = new File("").getAbsolutePath();
@@ -51,6 +51,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _eventFileChooser.setCurrentDirectory(new File(fileLoaderPath));
 
         _loadEventFileButton = new JButton(new ImageIcon(iconsPath + "open.png"));
+        _loadEventFileButton.setHorizontalAlignment(JLabel.LEFT);
         _loadEventFileButton.setToolTipText("Load Events file");
         _loadEventFileButton.addActionListener(e -> {
             try {
@@ -68,13 +69,23 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         });
         add(_loadEventFileButton);
 
+
+        //TODO
+        //JSeparator
+        JSeparator sep = new JSeparator(SwingConstants.VERTICAL);
+        sep.setPreferredSize(new Dimension(10, 42));
+        add(sep);
+
+
+        System.out.println(_loadEventFileButton.getPreferredSize());
+        System.out.println(sep.getPreferredSize());
+
+
         //Change CO2 Class
         _changeCO2Button = new JButton(new ImageIcon(iconsPath + "co2class.png"));
         _changeCO2Button.setToolTipText("Change CO2 class of a vehicle");
         _changeCO2Button.addActionListener(e -> {
-            _changeCO2Dialog = new ChangeCO2ClassDialog();
-            if (_changeCO2Dialog.open(_roadMap.getVehicles()) == 1)
-                _ctrl.addEvent(_changeCO2Dialog.getNewCO2Event());
+            changeCO2();
         });
         add(_changeCO2Button);
 
@@ -82,11 +93,13 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _changeWeatherButton = new JButton(new ImageIcon(iconsPath + "weather.png"));
         _changeWeatherButton.setToolTipText("Change Weather of a road");
         _changeWeatherButton.addActionListener(e -> {
-            _changeWeatherDialog = new ChangeWeatherDialog();
-            if (_changeWeatherDialog.open(_roadMap.getRoads()) == 1)
-                _ctrl.addEvent(_changeWeatherDialog.getNewWeatherEvent());
+            changeWeather();
         });
         add(_changeWeatherButton);
+
+
+        //JSeparator
+        add(new JSeparator(SwingConstants.VERTICAL));
 
         //Run
         _runButton = new JButton(new ImageIcon(iconsPath + "run.png"));
@@ -114,6 +127,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         add(ticksLabel);
         add(_ticksSpinner);
 
+
+        //JSeparator
+        add(new JSeparator(SwingConstants.VERTICAL));
+
         //Exit
         _exitButton = new JButton(new ImageIcon(iconsPath + "exit.png"));
         _exitButton.setToolTipText("Exit the simulator");
@@ -121,7 +138,18 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
             quit();
         });
         add(_exitButton);
+    }
 
+    private void changeCO2() {
+        _changeCO2Dialog = new ChangeCO2ClassDialog();
+        if (_changeCO2Dialog.open(_time, _roadMap.getVehicles()) == 1)
+            _ctrl.addEvent(_changeCO2Dialog.getNewCO2Event());
+    }
+
+    private void changeWeather() {
+        _changeWeatherDialog = new ChangeWeatherDialog();
+        if (_changeWeatherDialog.open(_time, _roadMap.getRoads()) == 1)
+            _ctrl.addEvent(_changeWeatherDialog.getNewWeatherEvent());
     }
 
     private void run() {
@@ -133,7 +161,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
     private void runSim(int n) {
         if (n > 0 && !_stopped){
             try {
-                //TODO change 2 argument !!!
+                //TODO change 2 argument, to Output to Information tables !!!
                 _ctrl.run(1, System.out);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this.getParent(), ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
