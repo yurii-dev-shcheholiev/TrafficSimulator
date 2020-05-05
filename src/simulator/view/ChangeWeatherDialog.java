@@ -17,8 +17,7 @@ public class ChangeWeatherDialog extends JDialog {
     private DefaultComboBoxModel<String> _roadModel;
     private JComboBox<Weather> _weather;
     private DefaultComboBoxModel<Weather> _weatherModel;
-    private JComboBox<Integer> _ticks;
-    private DefaultComboBoxModel<Integer> _tickModel;
+    private JSpinner _ticks;
 
     ChangeWeatherDialog() {
         super();
@@ -75,8 +74,11 @@ public class ChangeWeatherDialog extends JDialog {
 
         //Tics comboBox
         JLabel ticksLabel = new JLabel("Ticks:");
-        _tickModel = new DefaultComboBoxModel<>();
-        _ticks = new JComboBox<Integer>(_tickModel);
+        _ticks = new JSpinner(new SpinnerNumberModel(10, 1, 10000, 1));
+        _ticks.setToolTipText("Simulation tick to run: 1-10000");
+        _ticks.setMaximumSize(new Dimension(80, 40));
+        _ticks.setMinimumSize(new Dimension(80, 40));
+        _ticks.setPreferredSize(new Dimension(80, 40));
         boxesPanel.add(ticksLabel);
         boxesPanel.add(_ticks);
 
@@ -92,8 +94,7 @@ public class ChangeWeatherDialog extends JDialog {
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
             if (_roadModel.getSelectedItem() != null
-                    && _weatherModel.getSelectedItem() != null
-                    && _tickModel.getSelectedItem() != null) {
+                    && _weatherModel.getSelectedItem() != null) {
                 _status = 1;
                 ChangeWeatherDialog.this.setVisible(false);
             }
@@ -108,21 +109,15 @@ public class ChangeWeatherDialog extends JDialog {
         setVisible(false);
     }
 
-    //TODO find out why passed argument List<Road> roads is empty
     public int open(List<Road> roads) {
-        System.out.println(roads.size());
         _roadModel.removeAllElements();
         for (Road r : roads) {
             _roadModel.addElement(r.getId());
         }
-        System.out.println(_roadModel.getSize());
         for (Weather w : Weather.values()) {
             _weatherModel.addElement(w);
         }
 
-        for (int i = 0; i < 50; i++) {
-            _tickModel.addElement(i);
-        }
         // launch the window
         setVisible(true);
         return _status;
@@ -131,6 +126,6 @@ public class ChangeWeatherDialog extends JDialog {
     public SetWeatherEvent getNewWeatherEvent() {
         List<Pair<String, Weather>> tmp = new ArrayList<Pair<String, Weather>>();
         tmp.add(new Pair<String, Weather>((String) _roadModel.getSelectedItem(), (Weather) _weatherModel.getSelectedItem()));
-        return new SetWeatherEvent((Integer) _tickModel.getSelectedItem(), tmp);
+        return new SetWeatherEvent((Integer) _ticks.getValue(), tmp);
     }
 }

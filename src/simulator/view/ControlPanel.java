@@ -15,6 +15,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
     private Controller _ctrl;
     private RoadMap _roadMap;
     private int _time;
+    private boolean _stopped;
 
     private JButton _loadEventFileButton;
     private JFileChooser _eventFileChooser;
@@ -24,24 +25,30 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
     private ChangeWeatherDialog _changeWeatherDialog;
     private JButton _runButton;
     private JButton _stopButton;
-    private JButton _ticksButton;
+    private JSpinner _ticksSpinner;
     private JButton _exitButton;
 
     ControlPanel(Controller ctrl) {
         super();
         _ctrl = ctrl;
+        _stopped = false;
+        _time = 0;
         initGUI();
 
         _ctrl.addObserver(this);
     }
 
     private void initGUI() {
-        // Create a relative path to resources/icons
-        String iconsPath = new File("").getAbsolutePath() + "/resources/icons/";
+        //TODO add lines or additional panels to group buttons
 
+        // Create a relative path to resources/icons
+        String absolutePath = new File("").getAbsolutePath();
+        String iconsPath = absolutePath + "/resources/icons/";
+        String fileLoaderPath = absolutePath + "/resources/examples/";
 
         //Load Events File
         _eventFileChooser = new JFileChooser("Load Event File");
+        _eventFileChooser.setCurrentDirectory(new File(fileLoaderPath));
 
         _loadEventFileButton = new JButton(new ImageIcon(iconsPath + "open.png"));
         _loadEventFileButton.setToolTipText("Load Events file");
@@ -85,7 +92,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _runButton = new JButton(new ImageIcon(iconsPath + "run.png"));
         _runButton.setToolTipText("Run the simulation");
         _runButton.addActionListener(e -> {
-            //TODO
+            run();
         });
         add(_runButton);
 
@@ -93,12 +100,19 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _stopButton = new JButton(new ImageIcon(iconsPath + "stop.png"));
         _stopButton.setToolTipText("Stop the simulation");
         _stopButton.addActionListener(e -> {
-            //TODO
+            stop();
         });
         add(_stopButton);
 
         //Ticks
-        //TODO
+        JLabel ticksLabel = new JLabel("Ticks:");
+        _ticksSpinner = new JSpinner(new SpinnerNumberModel(10, 1, 10000, 1));
+        _ticksSpinner.setToolTipText("Simulation tick to run: 1-10000");
+        _ticksSpinner.setMaximumSize(new Dimension(80, 40));
+        _ticksSpinner.setMinimumSize(new Dimension(80, 40));
+        _ticksSpinner.setPreferredSize(new Dimension(80, 40));
+        add(ticksLabel);
+        add(_ticksSpinner);
 
         //Exit
         _exitButton = new JButton(new ImageIcon(iconsPath + "exit.png"));
@@ -108,6 +122,40 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         });
         add(_exitButton);
 
+    }
+
+    private void run() {
+        _stopped = false;
+        enableToolBar(false);
+        runSim((Integer) _ticksSpinner.getValue());
+    }
+
+    private void runSim(int n) {
+        if (n > 0 && !_stopped){
+            try {
+                //TODO change 2 argument !!!
+                _ctrl.run(1, System.out);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this.getParent(), ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                _stopped = true;
+                return;
+            }
+            SwingUtilities.invokeLater(() -> runSim(n - 1));
+        } else {
+            enableToolBar(true);
+            _stopped = true;
+        }
+    }
+
+    private void enableToolBar(boolean val) {
+        _loadEventFileButton.setEnabled(val);
+        _changeCO2Button.setEnabled(val);
+        _changeWeatherButton.setEnabled(val);
+        _runButton.setEnabled(val);
+    }
+
+    private void stop() {
+        _stopped = true;
     }
 
     private void quit() {

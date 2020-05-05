@@ -12,15 +12,14 @@ import java.util.List;
 public class ChangeCO2ClassDialog extends JDialog {
 
     private int _status;
-    private SetContaminationClassEvent _co2Event;
 
     private JLabel _descLabel;
     private JComboBox<String> _vehicles;
     private DefaultComboBoxModel<String> _vehicleModel;
     private JComboBox<Integer> _co2classes;
     private DefaultComboBoxModel<Integer> _co2Model;
-    private JComboBox<Integer> _ticks;
-    private DefaultComboBoxModel<Integer> _tickModel;
+    private JSpinner _ticks;
+
 
     ChangeCO2ClassDialog() {
         super();
@@ -74,11 +73,13 @@ public class ChangeCO2ClassDialog extends JDialog {
         boxesPanel.add(co2Label);
         boxesPanel.add(_co2classes);
 
-        //Tics comboBox
+        //Tics Spinner
         JLabel ticksLabel = new JLabel("Ticks:");
-        _tickModel = new DefaultComboBoxModel<>();
-        _ticks = new JComboBox<Integer>(_tickModel);
-        _ticks.setEditable(true);
+        _ticks = new JSpinner(new SpinnerNumberModel(10, 1, 10000, 1));
+        _ticks.setToolTipText("Simulation tick to run: 1-10000");
+//        _ticks.setMaximumSize(new Dimension(80, 40));
+//        _ticks.setMinimumSize(new Dimension(80, 40));
+//        _ticks.setPreferredSize(new Dimension(80, 40));
         boxesPanel.add(ticksLabel);
         boxesPanel.add(_ticks);
 
@@ -94,8 +95,7 @@ public class ChangeCO2ClassDialog extends JDialog {
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
             if (_vehicleModel.getSelectedItem() != null
-                    && _co2Model.getSelectedItem() != null
-                    && _tickModel.getSelectedItem() != null) {
+                    && _co2Model.getSelectedItem() != null) {
                 _status = 1;
                 ChangeCO2ClassDialog.this.setVisible(false);
             }
@@ -110,22 +110,16 @@ public class ChangeCO2ClassDialog extends JDialog {
         setVisible(false);
     }
 
-
-    //TODO find out why passed argument List<Vehicle> vehicles is empty
     public int open(List<Vehicle> vehicles) {
-        System.out.println(vehicles.size());
         _vehicleModel.removeAllElements();
         for (Vehicle v : vehicles) {
             _vehicleModel.addElement(v.getId());
         }
-        System.out.println(_vehicleModel.getSize());
+
         for (int i = 0; i < 10; i++) {
             _co2Model.addElement(i);
         }
 
-        for (int i = 0; i < 50; i++) {
-            _tickModel.addElement(i);
-        }
         setVisible(true);
         return _status;
     }
@@ -133,6 +127,6 @@ public class ChangeCO2ClassDialog extends JDialog {
     public SetContaminationClassEvent getNewCO2Event() {
         List<Pair<String, Integer>> tmp = new ArrayList<Pair<String, Integer>>();
         tmp.add(new Pair<String, Integer>((String) _vehicleModel.getSelectedItem(), (Integer) _co2Model.getSelectedItem()));
-        return new SetContaminationClassEvent((Integer) _tickModel.getSelectedItem(), tmp);
+        return new SetContaminationClassEvent((Integer) _ticks.getValue(), tmp);
     }
 }
