@@ -63,6 +63,10 @@ public abstract class Road extends SimulatedObject{
         return _contLimit;
     }
 
+    public int getTotalContamination() {
+        return _totalContamination;
+    }
+
     protected Weather getWeather() {
         return _weather;
     }

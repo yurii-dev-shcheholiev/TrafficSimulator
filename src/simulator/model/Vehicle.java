@@ -38,7 +38,7 @@ public class Vehicle extends SimulatedObject {
         _currentJ = 0;
     }
 
-    int getLocation() {
+    public int getLocation() {
         return _location;
     }
 
@@ -46,7 +46,7 @@ public class Vehicle extends SimulatedObject {
         return _currentSpeed;
     }
 
-    int getContClass() {
+    public int getContClass() {
         return _contamination;
     }
 
@@ -61,6 +61,7 @@ public class Vehicle extends SimulatedObject {
     public Road getRoad() {
         return _road;
     }
+
 
     void setSpeed(int speed) {
         if (speed < 0)

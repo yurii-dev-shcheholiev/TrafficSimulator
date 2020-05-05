@@ -4,10 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import simulator.factories.Factory;
-import simulator.model.Event;
-import simulator.model.Observable;
-import simulator.model.TrafficSimObserver;
-import simulator.model.TrafficSimulator;
+import simulator.model.*;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -66,4 +63,5 @@ public class Controller implements Observable<TrafficSimObserver>{
     public void addEvent(Event e) {
         _trafSim.addEvent(e);
     }
+
 }
