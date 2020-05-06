@@ -42,7 +42,7 @@ public class Vehicle extends SimulatedObject {
         return _location;
     }
 
-    int getSpeed() {
+    public int getSpeed() {
         return _currentSpeed;
     }
 
@@ -61,6 +61,12 @@ public class Vehicle extends SimulatedObject {
     public Road getRoad() {
         return _road;
     }
+
+    public int getMaxSpeed(){ return _maxSpeed; }
+
+    public int getTotalDistance(){ return _totalDistance; }
+
+    public int currentJunction(){ return _currentJ; }
 
 
     void setSpeed(int speed) {

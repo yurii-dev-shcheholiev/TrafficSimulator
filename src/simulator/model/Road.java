@@ -71,9 +71,17 @@ public abstract class Road extends SimulatedObject{
         return _weather;
     }
 
+    public Weather getPWeather() {return getWeather(); }  //Possible change
+
     protected int getMaxSpeed() {
         return _maxSpeed;
     }
+
+    public int getPMaxSpeed() { return  getMaxSpeed(); }  //Possible Change
+
+    public int getSpeedLimit() {return _limitSpeed; }
+
+    public int getPContLimit() {return getContLimit(); }  //Possible Change
 
     public List<Vehicle> getVehicles() {
         return _vehicles;

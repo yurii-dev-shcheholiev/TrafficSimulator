@@ -1,5 +1,6 @@
 package simulator.view;
 
+import javafx.geometry.VerticalDirection;
 import simulator.control.Controller;
 import simulator.model.Event;
 import simulator.model.RoadMap;
@@ -22,7 +23,7 @@ public class StatusBar extends JPanel implements TrafficSimObserver {
         super();
         _ctrl = ctrl;
         _currTime = 0;
-        _event = null;
+        _event = "null";
 
         initGUI();
 
@@ -31,14 +32,25 @@ public class StatusBar extends JPanel implements TrafficSimObserver {
 
     private void initGUI() {
 
-        _timeLabel = new JLabel(String.valueOf(_currTime));
-        _timeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-        _eventLabel = new JLabel("Event Added " + _event);
-        _eventLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
+        _timeLabel = new JLabel("Time:  " + _currTime);
+//        _timeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        //_timeLabel.setHorizontalAlignment(SwingConstants.HORIZONTAL);
         this.add(_timeLabel);
-        this.add( _eventLabel);
+
+        this.add(Box.createRigidArea(new Dimension(50,0)));
+
+//        this.add(new JSeparator(SwingConstants.VERTICAL));
+
+       //this.add(new JSeparator());
+
+        _eventLabel = new JLabel("Event Added (" + _event + ")");
+//        _eventLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        //_eventLabel.setHorizontalAlignment(SwingConstants.HORIZONTAL);
+        this.add(_eventLabel);
+
+        this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
     }
     @Override
