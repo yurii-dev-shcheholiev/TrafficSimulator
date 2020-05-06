@@ -38,7 +38,7 @@ public class JTableExamples extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private Border _defaultBorder = BorderFactory.createLineBorder(Color.red, 1);
-	private EventsTableModel _model;
+	private EventsTableModelEx _model;
 	private JTable _eventsTable;
 	private JButton addButton;
 
@@ -98,7 +98,7 @@ public class JTableExamples extends JFrame {
 				TitledBorder.TOP));
 
 		// the model
-		_model = new EventsTableModel();
+		_model = new EventsTableModelEx();
 		_eventsTable = new JTable(_model);
 
 		eventsPanel.add(new JScrollPane(_eventsTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,

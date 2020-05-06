@@ -60,7 +60,7 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
             y = (i + 1) * 50;
 
             g.setColor(Color.BLACK);
-            g.drawString(r.getId(), x1 - 25, y + _JRADIUS / 4);
+            g.drawString(r.getId(), x1 - 30, y + _JRADIUS / 4);
 
             g.drawLine(x1, y, x2, y);
 
@@ -158,11 +158,11 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 
     }
 
-    private void drawContamination() {
+    private void drawContamination(Graphics g) {
 
     }
 
-    private void drawWeather() {
+    private void drawWeather(Graphics g) {
 
     }
 

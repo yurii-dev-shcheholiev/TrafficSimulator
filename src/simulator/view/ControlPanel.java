@@ -102,10 +102,6 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         loadPanel.add(sep);
 
 
-        System.out.println(_loadEventFileButton.getPreferredSize());
-        System.out.println(sep.getPreferredSize());
-
-
         //Change CO2 Class
         _changeCO2Button = new JButton(new ImageIcon(iconsPath + "co2class.png"));
         _changeCO2Button.setToolTipText("Change CO2 class of a vehicle");
@@ -167,14 +163,19 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
 
     private void changeCO2() {
         _changeCO2Dialog = new ChangeCO2ClassDialog();
-        if (_changeCO2Dialog.open(_time, _roadMap.getVehicles()) == 1)
+        if (_changeCO2Dialog.open(_time, _roadMap.getVehicles()) == 1) {
+            System.out.println(_changeCO2Dialog.getNewCO2Event().toString());
             _ctrl.addEvent(_changeCO2Dialog.getNewCO2Event());
+        }
     }
 
     private void changeWeather() {
         _changeWeatherDialog = new ChangeWeatherDialog();
-        if (_changeWeatherDialog.open(_time, _roadMap.getRoads()) == 1)
+        if (_changeWeatherDialog.open(_time, _roadMap.getRoads()) == 1) {
+            System.out.println(_changeWeatherDialog.getNewWeatherEvent().toString());
             _ctrl.addEvent(_changeWeatherDialog.getNewWeatherEvent());
+
+        }
     }
 
     private void run() {
@@ -228,7 +229,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
 
     @Override
     public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-
+        _time = time;
     }
 
     @Override
@@ -238,7 +239,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
 
     @Override
     public void onReset(RoadMap map, List<Event> events, int time) {
-
+        _roadMap = map;
+        _time = time;
     }
 
     @Override
