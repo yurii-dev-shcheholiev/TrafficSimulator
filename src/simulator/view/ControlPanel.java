@@ -46,6 +46,31 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         String iconsPath = absolutePath + "/resources/icons/";
         String fileLoaderPath = absolutePath + "/resources/examples/";
 
+        //Load Panel
+        JPanel loadPanel = new JPanel();
+        loadPanel.setBackground(Color.red);
+        loadPanel.setAlignmentX(LEFT_ALIGNMENT);
+        this.add(loadPanel);
+
+        //Changing Panel
+        JPanel changePanel = new JPanel();
+        changePanel.setBackground(Color.blue);
+        changePanel.setAlignmentX(LEFT_ALIGNMENT);
+        this.add(changePanel);
+
+        //Run Stop Ticks Panel
+        JPanel runPanel = new JPanel();
+        runPanel.setBackground(Color.yellow);
+        runPanel.setAlignmentX(LEFT_ALIGNMENT);
+        this.add(runPanel);
+
+        //Exit Panel
+        JPanel exitPanel = new JPanel();
+        exitPanel.setBackground(Color.black);
+        exitPanel.setAlignmentX(RIGHT_ALIGNMENT);
+        this.add(exitPanel);
+
+
         //Load Events File
         _eventFileChooser = new JFileChooser("Load Event File");
         _eventFileChooser.setCurrentDirectory(new File(fileLoaderPath));
@@ -67,14 +92,14 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
                 JOptionPane.showMessageDialog(this.getParent(), ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-        add(_loadEventFileButton);
+        loadPanel.add(_loadEventFileButton);
 
 
         //TODO
         //JSeparator
         JSeparator sep = new JSeparator(SwingConstants.VERTICAL);
-        sep.setPreferredSize(new Dimension(10, 42));
-        add(sep);
+        sep.setPreferredSize(new Dimension(5, 42));
+        loadPanel.add(sep);
 
 
         System.out.println(_loadEventFileButton.getPreferredSize());
@@ -87,7 +112,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _changeCO2Button.addActionListener(e -> {
             changeCO2();
         });
-        add(_changeCO2Button);
+        changePanel.add(_changeCO2Button);
 
         //Change Weather
         _changeWeatherButton = new JButton(new ImageIcon(iconsPath + "weather.png"));
@@ -95,11 +120,11 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _changeWeatherButton.addActionListener(e -> {
             changeWeather();
         });
-        add(_changeWeatherButton);
+        changePanel.add(_changeWeatherButton);
 
 
         //JSeparator
-        add(new JSeparator(SwingConstants.VERTICAL));
+        changePanel.add(new JSeparator(SwingConstants.VERTICAL));
 
         //Run
         _runButton = new JButton(new ImageIcon(iconsPath + "run.png"));
@@ -107,7 +132,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _runButton.addActionListener(e -> {
             run();
         });
-        add(_runButton);
+        runPanel.add(_runButton);
 
         //Stop
         _stopButton = new JButton(new ImageIcon(iconsPath + "stop.png"));
@@ -115,7 +140,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _stopButton.addActionListener(e -> {
             stop();
         });
-        add(_stopButton);
+        runPanel.add(_stopButton);
 
         //Ticks
         JLabel ticksLabel = new JLabel("Ticks:");
@@ -124,12 +149,12 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _ticksSpinner.setMaximumSize(new Dimension(80, 40));
         _ticksSpinner.setMinimumSize(new Dimension(80, 40));
         _ticksSpinner.setPreferredSize(new Dimension(80, 40));
-        add(ticksLabel);
-        add(_ticksSpinner);
+        runPanel.add(ticksLabel);
+        runPanel.add(_ticksSpinner);
 
 
         //JSeparator
-        add(new JSeparator(SwingConstants.VERTICAL));
+        exitPanel.add(new JSeparator(SwingConstants.VERTICAL));
 
         //Exit
         _exitButton = new JButton(new ImageIcon(iconsPath + "exit.png"));
@@ -137,7 +162,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _exitButton.addActionListener(e -> {
             quit();
         });
-        add(_exitButton);
+        exitPanel.add(_exitButton);
     }
 
     private void changeCO2() {

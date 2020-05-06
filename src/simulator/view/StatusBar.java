@@ -37,18 +37,17 @@ public class StatusBar extends JPanel implements TrafficSimObserver {
         _eventLabel = new JLabel("Event Added " + _event);
         _eventLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        this.add(_timeLabel, _eventLabel);
+        this.add(_timeLabel);
+        this.add( _eventLabel);
 
     }
     @Override
     public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-
         _currTime = time;
     }
 
     @Override
     public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-
         _currTime = time;
     }
 
