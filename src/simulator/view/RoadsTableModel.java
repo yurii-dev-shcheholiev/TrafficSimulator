@@ -70,11 +70,11 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
                 rTable[i][0] = map.getRoads().get(i);
                 rTable[i][1] = map.getRoads().get(i).getId();
                 rTable[i][2] = map.getRoads().get(i).getLength();
-                rTable[i][3] = map.getRoads().get(i).getPWeather();
-                rTable[i][4] = map.getRoads().get(i).getPMaxSpeed();
+                rTable[i][3] = map.getRoads().get(i).getWeather();
+                rTable[i][4] = map.getRoads().get(i).getMaxSpeed();
                 rTable[i][5] = map.getRoads().get(i).getSpeedLimit();
                 rTable[i][6] = map.getRoads().get(i).getTotalContamination();
-                rTable[i][7] = map.getRoads().get(i).getPContLimit();
+                rTable[i][7] = map.getRoads().get(i).getContLimit();
         }
     }
 

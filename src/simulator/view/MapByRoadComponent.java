@@ -89,11 +89,13 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
                     int x = x1 + (int) ((x2 - x1) * ((double) v.getLocation() / (double) r.getLength()));
 
                     g.setColor(Color.GREEN);
-                    g.fillOval(x - _JRADIUS / 2, y - _JRADIUS / 2, 14, 14);
-                    g.drawImage(_car, x - _JRADIUS / 2, y - _JRADIUS / 2, 12, 12, this);
+                    g.drawImage(_car, x - _JRADIUS / 2 , y - _JRADIUS, 16, 16, this);
 
-                    g.setColor(Color.BLACK);
-                    g.drawString(v.getId(), x - _JRADIUS / 2, y - _JRADIUS / 2);
+                    // Choose a color for the vehcile's label and background, depending on its
+                    // contamination class
+                    int vLabelColor = (int) (25.0 * (10.0 - (double) v.getContClass()));
+                    g.setColor(new Color(0, vLabelColor, 0));
+                    g.drawString(v.getId(), x - 4, y - _JRADIUS);
                 }
             }
 
@@ -118,9 +120,37 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
                     weatherImg = null;
             }
             g.setColor(_BG_COLOR);
-            g.drawImage(weatherImg, x2 + _JRADIUS / 2, y - 15, _ISIZE, _ISIZE, this);
+            g.drawImage(weatherImg, x2 + 11, y - 15, _ISIZE, _ISIZE, this);
 
-            //TODO contamination level
+            //Contamination level
+            int c = (int) Math.floor(Math.min((double)r.getTotalContamination() / (1.0 + (double)r.getContLimit() ), 1.0) / 0.19);
+            Image co2Img;
+            switch (c) {
+                case 0:
+                    co2Img = loadImage("cont_0.png");
+                    break;
+                case 1:
+                    co2Img = loadImage("cont_1.png");
+                    break;
+                case 2:
+                    co2Img = loadImage("cont_2.png");
+                    break;
+                case 3:
+                    co2Img = loadImage("cont_3.png");
+                    break;
+                case 4:
+                    co2Img = loadImage("cont_4.png");
+                    break;
+                case 5:
+                    co2Img = loadImage("cont_5.png");
+                    break;
+                default:
+                    co2Img = null;
+            }
+
+            g.setColor(_BG_COLOR);
+            g.drawImage(co2Img, x2 + 50, y - 15, _ISIZE, _ISIZE, this);
+
 
             //Increment
             i++;

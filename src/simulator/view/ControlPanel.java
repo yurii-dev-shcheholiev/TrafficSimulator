@@ -66,7 +66,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
 
         //Exit Panel
         JPanel exitPanel = new JPanel();
-        exitPanel.setBackground(Color.black);
+        exitPanel.setBackground(Color.magenta);
         exitPanel.setAlignmentX(RIGHT_ALIGNMENT);
         this.add(exitPanel);
 
