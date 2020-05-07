@@ -6,6 +6,7 @@ import simulator.model.RoadMap;
 import simulator.model.TrafficSimObserver;
 
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
 import java.util.List;
 
 //TODO Need to Fix that there are All ones at the begining and that remain in the table
@@ -13,20 +14,20 @@ import java.util.List;
 public class EventsTableModel extends AbstractTableModel implements TrafficSimObserver {
 
     private Controller _ctrl;
-    private Object[][] eTable;
+    private List<Event> eTable;
     private String[] colNames;
 
     public EventsTableModel(Controller ctrl){
         super();
         _ctrl = ctrl;
-        eTable = new Object[50][50];
+        eTable = new ArrayList<>();
         colNames = new String[]{"Time", "Description"};
         _ctrl.addObserver(this);
     }
 
     @Override
     public int getRowCount() {
-        return eTable[0].length;
+        return eTable.size();
     }
 
     @Override
@@ -38,7 +39,14 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return eTable[rowIndex][columnIndex];
+        Event e = eTable.get(rowIndex);
+        switch (columnIndex) {
+            case 0:
+                return e.getTime();
+            case 1:
+                return e.toString();
+        }
+        return null;
     }
 
     @Override
@@ -73,24 +81,10 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
 
 
     private void table(List<Event> events){
-
-        clearTable();
-
-        for (int i = 0; i < events.size(); i++){
-
-            eTable[i][0] = events.get(i).getTime();
-            eTable[i][1] = events.get(i).toString();
-        }
+        eTable = events;
 
         this.fireTableDataChanged();
     }
 
 
-    private void clearTable() {
-        for (Object[] row : eTable) {
-            for (Object ob : row) {
-                row = null;
-            }
-        }
-    }
 }

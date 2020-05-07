@@ -46,6 +46,12 @@ public class Controller implements Observable<TrafficSimObserver>{
         p.println(jo.toString(5));
     }
 
+    public void run(int n) {
+        for (int i = 0; i < n; i++) {
+            _trafSim.advance();
+        }
+    }
+
     public void reset() {
         _trafSim.reset();
     }

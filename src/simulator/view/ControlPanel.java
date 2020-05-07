@@ -40,6 +40,11 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
 
     private void initGUI() {
         //TODO add lines or additional panels to group buttons, fix JSeparators
+//        setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+
+//        JToolBar
 
         // Create a relative path to resources/icons
         String absolutePath = new File("").getAbsolutePath();
@@ -185,7 +190,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         if (n > 0 && !_stopped){
             try {
                 //TODO change 2 argument, to Output to Information tables !!!
-                _ctrl.run(1, System.out);
+                _ctrl.run(1);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this.getParent(), ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 _stopped = true;
