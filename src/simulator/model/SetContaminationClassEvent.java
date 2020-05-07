@@ -27,6 +27,6 @@ public class SetContaminationClassEvent extends Event {
 
     @Override
     public String toString() {
-        return "Set Contamination \'" + _cs + "\'";
+        return "Set Contamination \'" + _cs.get(0) + "\'";
     }
 }
