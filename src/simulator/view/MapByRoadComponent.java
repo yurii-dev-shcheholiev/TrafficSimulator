@@ -56,126 +56,120 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
         int i = 0;
 
         for (Road r : _map.getRoads()) {
-            //Roads
+            //calculate y of all components
             y = (i + 1) * 50;
 
-            g.setColor(Color.BLACK);
-            g.drawString(r.getId(), x1 - 30, y + _JRADIUS / 4);
+            drawRoads(g, r, x1, x2, y);
 
-            g.drawLine(x1, y, x2, y);
+            drawJunctions(g, r, x1, x2, y);
 
-            //Junctions
-            //srcJunction
-            g.setColor(Color.BLUE);
-            g.fillOval(x1 - _JRADIUS / 2, y - _JRADIUS / 2, _JRADIUS, _JRADIUS);
+            drawVehicles(g, r, x1, x2, y);
 
-            g.setColor(_JUNCTION_LABEL_COLOR);
-            g.drawString(r.getSrcJunction().getId(), x1 - _JRADIUS / 2, y - _JRADIUS);
+            drawWeather(g, r, x1, x2, y);
 
-            //destJunction
-            //TODO how to get if junction has green or red ??
-            if (r.getDestJunction().getGreenLightIndex() != -1)
-                g.setColor(Color.GREEN);
-            else
-                g.setColor(Color.RED);
-            g.fillOval(x2 - _JRADIUS / 2, y - _JRADIUS / 2, _JRADIUS, _JRADIUS);
-
-            g.setColor(_JUNCTION_LABEL_COLOR);
-            g.drawString(r.getDestJunction().getId(), x2 - _JRADIUS / 2, y - _JRADIUS);
-
-            //Vehicles
-            for (Vehicle v : r.getVehicles()) {
-                if (v.getStatus() != VehicleStatus.ARRIVED) {
-                    int x = x1 + (int) ((x2 - x1) * ((double) v.getLocation() / (double) r.getLength()));
-
-                    g.setColor(Color.GREEN);
-                    g.drawImage(_car, x - _JRADIUS / 2 , y - _JRADIUS, 16, 16, this);
-
-                    // Choose a color for the vehcile's label and background, depending on its
-                    // contamination class
-                    int vLabelColor = (int) (25.0 * (10.0 - (double) v.getContClass()));
-                    g.setColor(new Color(0, vLabelColor, 0));
-                    g.drawString(v.getId(), x - 4, y - _JRADIUS);
-                }
-            }
-
-            Image weatherImg;
-            switch (r.getWeather()) {
-                case STORM:
-                    weatherImg = loadImage("storm.png");
-                    break;
-                case SUNNY:
-                    weatherImg = loadImage("sun.png");
-                    break;
-                case RAINY:
-                    weatherImg = loadImage("rain.png");
-                    break;
-                case WINDY:
-                    weatherImg = loadImage("wind.png");
-                    break;
-                case CLOUDY:
-                    weatherImg = loadImage("cloud.png");
-                    break;
-                default:
-                    weatherImg = null;
-            }
-            g.setColor(_BG_COLOR);
-            g.drawImage(weatherImg, x2 + 11, y - 15, _ISIZE, _ISIZE, this);
-
-            //Contamination level
-            int c = (int) Math.floor(Math.min((double)r.getTotalContamination() / (1.0 + (double)r.getContLimit() ), 1.0) / 0.19);
-            Image co2Img;
-            switch (c) {
-                case 0:
-                    co2Img = loadImage("cont_0.png");
-                    break;
-                case 1:
-                    co2Img = loadImage("cont_1.png");
-                    break;
-                case 2:
-                    co2Img = loadImage("cont_2.png");
-                    break;
-                case 3:
-                    co2Img = loadImage("cont_3.png");
-                    break;
-                case 4:
-                    co2Img = loadImage("cont_4.png");
-                    break;
-                case 5:
-                    co2Img = loadImage("cont_5.png");
-                    break;
-                default:
-                    co2Img = null;
-            }
-
-            g.setColor(_BG_COLOR);
-            g.drawImage(co2Img, x2 + 50, y - 15, _ISIZE, _ISIZE, this);
-
+            drawContamination(g, r, x1, x2, y);
 
             //Increment
             i++;
         }
+    }
+
+    private void drawRoads(Graphics g, Road r, int x1, int x2, int y) {
+        g.setColor(Color.BLACK);
+        g.drawString(r.getId(), x1 - 30, y + _JRADIUS / 4);
+        g.drawLine(x1, y, x2, y);
+    }
+
+    private void drawJunctions(Graphics g, Road r, int x1, int x2, int y) {
+        //srcJunction
+        g.setColor(Color.BLUE);
+        g.fillOval(x1 - _JRADIUS / 2, y - _JRADIUS / 2, _JRADIUS, _JRADIUS);
+
+        g.setColor(_JUNCTION_LABEL_COLOR);
+        g.drawString(r.getSrcJunction().getId(), x1 - _JRADIUS / 2, y - _JRADIUS);
+
+        //destJunction
+        //TODO how to get if junction has green or red ??
+        if (r.getDestJunction().getGreenLightIndex() != -1)
+            g.setColor(Color.GREEN);
+        else
+            g.setColor(Color.RED);
+        g.fillOval(x2 - _JRADIUS / 2, y - _JRADIUS / 2, _JRADIUS, _JRADIUS);
+
+        g.setColor(_JUNCTION_LABEL_COLOR);
+        g.drawString(r.getDestJunction().getId(), x2 - _JRADIUS / 2, y - _JRADIUS);
 
     }
 
-    private void drawContamination(Graphics g) {
+    private void drawVehicles(Graphics g, Road r, int x1, int x2, int y) {
+        for (Vehicle v : r.getVehicles()) {
+            if (v.getStatus() != VehicleStatus.ARRIVED) {
+                int x = x1 + (int) ((x2 - x1) * ((double) v.getLocation() / (double) r.getLength()));
 
+                g.setColor(Color.GREEN);
+                g.drawImage(_car, x - _JRADIUS / 2 , y - _JRADIUS, 16, 16, this);
+
+                // Choose a color for the vehcile's label and background, depending on its
+                // contamination class
+                int vLabelColor = (int) (25.0 * (10.0 - (double) v.getContClass()));
+                g.setColor(new Color(0, vLabelColor, 0));
+                g.drawString(v.getId(), x - 4, y - _JRADIUS);
+            }
+        }
     }
 
-    private void drawWeather(Graphics g) {
-
+    private void drawContamination(Graphics g, Road r, int x1, int x2, int y) {
+        int c = (int) Math.floor(Math.min((double)r.getTotalContamination() / (1.0 + (double)r.getContLimit() ), 1.0) / 0.19);
+        Image co2Img;
+        switch (c) {
+            case 0:
+                co2Img = loadImage("cont_0.png");
+                break;
+            case 1:
+                co2Img = loadImage("cont_1.png");
+                break;
+            case 2:
+                co2Img = loadImage("cont_2.png");
+                break;
+            case 3:
+                co2Img = loadImage("cont_3.png");
+                break;
+            case 4:
+                co2Img = loadImage("cont_4.png");
+                break;
+            case 5:
+                co2Img = loadImage("cont_5.png");
+                break;
+            default:
+                co2Img = null;
+        }
+        g.setColor(_BG_COLOR);
+        g.drawImage(co2Img, x2 + 50, y - 15, _ISIZE, _ISIZE, this);
     }
 
-    private void drawRoads(Graphics g) {
-
-    }
-
-    private void drawJunctions(Graphics g) {
-
-    }
-
-    private void drawVehicles(Graphics g) {
-
+    private void drawWeather(Graphics g, Road r, int x1, int x2, int y) {
+        Image weatherImg;
+        switch (r.getWeather()) {
+            case STORM:
+                weatherImg = loadImage("storm.png");
+                break;
+            case SUNNY:
+                weatherImg = loadImage("sun.png");
+                break;
+            case RAINY:
+                weatherImg = loadImage("rain.png");
+                break;
+            case WINDY:
+                weatherImg = loadImage("wind.png");
+                break;
+            case CLOUDY:
+                weatherImg = loadImage("cloud.png");
+                break;
+            default:
+                weatherImg = null;
+        }
+        g.setColor(_BG_COLOR);
+        g.drawImage(weatherImg, x2 + 11, y - 15, _ISIZE, _ISIZE, this);
     }
 
     private Image loadImage(String img) {

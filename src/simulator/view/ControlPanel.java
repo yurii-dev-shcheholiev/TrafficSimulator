@@ -203,6 +203,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _changeCO2Button.setEnabled(val);
         _changeWeatherButton.setEnabled(val);
         _runButton.setEnabled(val);
+        _exitButton.setEnabled(val);
     }
 
     private void stop() {
