@@ -89,8 +89,8 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
         g.drawString(r.getSrcJunction().getId(), x1 - _JRADIUS / 2, y - _JRADIUS);
 
         //destJunction
-        //TODO how to get if junction has green or red ??
-        if (r.getDestJunction().getGreenLightIndex() != -1)
+        if (r.getDestJunction().getGreenLightIndex() != -1
+                && r.equals(r.getDestJunction().getInRoads().get(r.getDestJunction().getGreenLightIndex())) )
             g.setColor(Color.GREEN);
         else
             g.setColor(Color.RED);
@@ -98,7 +98,6 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 
         g.setColor(_JUNCTION_LABEL_COLOR);
         g.drawString(r.getDestJunction().getId(), x2 - _JRADIUS / 2, y - _JRADIUS);
-
     }
 
     private void drawVehicles(Graphics g, Road r, int x1, int x2, int y) {
