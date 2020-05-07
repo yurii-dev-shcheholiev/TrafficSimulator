@@ -5,6 +5,7 @@ import simulator.control.Controller;
 import simulator.view.MapComponent;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 public class MainWindow extends JFrame {
@@ -35,32 +36,22 @@ public class MainWindow extends JFrame {
         viewsPanel.add(mapsPanel);
 
 
-
         //tables
         JPanel eventsView = createViewPanel(new JTable(new EventsTableModel(_ctrl)), "Events");
         eventsView.setPreferredSize(new Dimension(500, 200));
-        eventsView.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        eventsView.setBorder(BorderFactory.createTitledBorder("Events"));
         tablesPanel.add(eventsView);
 
         JPanel vehiclesView = createViewPanel( new JTable( new VehiclesTableModel( _ctrl )), "Vehicles" );
         vehiclesView.setPreferredSize(new Dimension(500, 200));
-        vehiclesView.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        vehiclesView.setBorder(BorderFactory.createTitledBorder("Vehicles"));
         tablesPanel.add(vehiclesView);
 
         JPanel roadsView = createViewPanel( new JTable( new RoadsTableModel( _ctrl )), "Roads" );
         roadsView.setPreferredSize(new Dimension(500, 200));
-        roadsView.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        roadsView.setBorder(BorderFactory.createTitledBorder("Roads"));
         tablesPanel.add(roadsView);
 
         JPanel junctionsView = createViewPanel( new JTable( new JunctionsTableModel( _ctrl )), "Junctions");
         junctionsView.setPreferredSize(new Dimension(500, 200));
-        junctionsView.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        junctionsView.setBorder(BorderFactory.createTitledBorder("Junctions"));
         tablesPanel.add(junctionsView);
-
 
 
         // maps
@@ -68,7 +59,6 @@ public class MainWindow extends JFrame {
         mapView.setPreferredSize(new Dimension(500, 400));
         mapsPanel.add(mapView);
 
-        //TODO add a map for MapByRoadComponent
         JPanel mapByRoadView = createViewPanel(new MapByRoadComponent(_ctrl), "Map By Road");
         mapsPanel.add(mapByRoadView);
 
@@ -80,7 +70,8 @@ public class MainWindow extends JFrame {
 
     private JPanel createViewPanel(JComponent c, String title) {
         JPanel p = new JPanel(new BorderLayout());
-        //TODO add a framed border to p with title
+        Border b = BorderFactory.createLineBorder(Color.BLACK, 2);
+        p.setBorder(BorderFactory.createTitledBorder(b, title));
         p.add(new JScrollPane(c));
         return p;
     }
