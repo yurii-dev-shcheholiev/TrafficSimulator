@@ -10,11 +10,15 @@ public class VehiclesTableModel extends AbstractTableModel implements TrafficSim
 
     private Controller _ctrl;
     private Object[][] vTable;
+    private String[] colNames;
+
     public VehiclesTableModel(Controller ctrl){
         super();
         _ctrl = ctrl;
         vTable = new Object[50][50];
         _ctrl.addObserver(this);
+        colNames = new String[]{"ID", "Status", "Itinerary", "CO2 Class", "Max. Speed", "Current Speed", "Total " +
+                "CO2 Emitted", "Total Distance Travelled"};
     }
 
     @Override
@@ -24,8 +28,10 @@ public class VehiclesTableModel extends AbstractTableModel implements TrafficSim
 
     @Override
     public int getColumnCount() {
-        return vTable.length;
+        return colNames.length;
     }
+
+    public String getColumnName(int i) { return colNames[i]; }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -33,19 +39,29 @@ public class VehiclesTableModel extends AbstractTableModel implements TrafficSim
     }
 
     @Override
-    public void onAdvanceStart(RoadMap map, List<Event> events, int time) { table(map); }
+    public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
+        table(map);
+    }
 
     @Override
-    public void onAdvanceEnd(RoadMap map, List<Event> events, int time) { table(map); }
+    public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
+        table(map);
+    }
 
     @Override
-    public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) { table(map); }
+    public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
+        table(map);
+    }
 
     @Override
-    public void onReset(RoadMap map, List<Event> events, int time) { table(map); }
+    public void onReset(RoadMap map, List<Event> events, int time) {
+        table(map);
+    }
 
     @Override
-    public void onRegister(RoadMap map, List<Event> events, int time) { table(map);}
+    public void onRegister(RoadMap map, List<Event> events, int time) {
+        table(map);
+    }
 
     @Override
     public void onError(String err) {
@@ -57,31 +73,33 @@ public class VehiclesTableModel extends AbstractTableModel implements TrafficSim
 
         for (int i = 0; i < map.getVehicles().size(); i++){
 
-                vTable[i][0] = map.getVehicles().get(i);
-                vTable[i][1] = map.getVehicles().get(i).getId();
+                vTable[i][0] = map.getVehicles().get(i).getId();
 
 
                 switch (map.getVehicles().get(i).getStatus()){
                     case PENDING:
-                        vTable[i][2] = "Pending";
+                        vTable[i][1] = "Pending";
                         break;
                     case TRAVELING:
-                        vTable[i][2] = map.getVehicles().get(i).getRoad()+ ":" + map.getVehicles().get(i).getLocation();
+                        vTable[i][1] = map.getVehicles().get(i).getRoad()+ ":" + map.getVehicles().get(i).getLocation();
                         break;
                     case WAITING:
-                        vTable[i][2] = "Waiting:j" + map.getVehicles().get(i).currentJunction();
+                        vTable[i][1] = "Waiting:j" + map.getVehicles().get(i).currentJunction();
                         break;
                     case ARRIVED:
-                        vTable[i][2] = "Arrived";
+                        vTable[i][1] = "Arrived";
                         break;
                 }
 
-                vTable[i][3] = map.getVehicles().get(i).getItinerary();
-                vTable[i][4] = map.getVehicles().get(i).getContClass();
-                vTable[i][5] = map.getVehicles().get(i).getMaxSpeed();
-                vTable[i][6] = map.getVehicles().get(i).getSpeed();
-                vTable[i][7] = map.getVehicles().get(i).getTotalDistance();
+                vTable[i][2] = map.getVehicles().get(i).getItinerary();
+                vTable[i][3] = map.getVehicles().get(i).getContClass();
+                vTable[i][4] = map.getVehicles().get(i).getMaxSpeed();
+                vTable[i][5] = map.getVehicles().get(i).getSpeed();
+                vTable[i][6] = map.getVehicles().get(i).getTotalDistance();
         }
+
+        this.fireTableDataChanged();
+
     }
 
 }

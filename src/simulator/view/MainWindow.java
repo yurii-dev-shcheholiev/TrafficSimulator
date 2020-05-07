@@ -34,12 +34,34 @@ public class MainWindow extends JFrame {
         mapsPanel.setLayout(new BoxLayout(mapsPanel, BoxLayout.Y_AXIS));
         viewsPanel.add(mapsPanel);
 
+
+
         //tables
         JPanel eventsView = createViewPanel(new JTable(new EventsTableModel(_ctrl)), "Events");
         eventsView.setPreferredSize(new Dimension(500, 200));
+        eventsView.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        eventsView.setBorder(BorderFactory.createTitledBorder("Events"));
         tablesPanel.add(eventsView);
 
-        //TODO add other tables
+        JPanel vehiclesView = createViewPanel( new JTable( new VehiclesTableModel( _ctrl )), "Vehicles" );
+        vehiclesView.setPreferredSize(new Dimension(500, 200));
+        vehiclesView.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        vehiclesView.setBorder(BorderFactory.createTitledBorder("Vehicles"));
+        tablesPanel.add(vehiclesView);
+
+        JPanel roadsView = createViewPanel( new JTable( new RoadsTableModel( _ctrl )), "Roads" );
+        roadsView.setPreferredSize(new Dimension(500, 200));
+        roadsView.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        roadsView.setBorder(BorderFactory.createTitledBorder("Roads"));
+        tablesPanel.add(roadsView);
+
+        JPanel junctionsView = createViewPanel( new JTable( new JunctionsTableModel( _ctrl )), "Junctions");
+        junctionsView.setPreferredSize(new Dimension(500, 200));
+        junctionsView.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        junctionsView.setBorder(BorderFactory.createTitledBorder("Junctions"));
+        tablesPanel.add(junctionsView);
+
+
 
         // maps
         JPanel mapView = createViewPanel(new MapComponent(_ctrl), "Map");

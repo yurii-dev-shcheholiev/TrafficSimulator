@@ -8,15 +8,20 @@ import simulator.model.TrafficSimObserver;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
+//TODO Need to Fix that there are All ones at the begining and that remain in the table
+
 public class EventsTableModel extends AbstractTableModel implements TrafficSimObserver {
 
     private Controller _ctrl;
     private Object[][] eTable;
+    private String[] colNames;
+
     public EventsTableModel(Controller ctrl){
         super();
         _ctrl = ctrl;
         eTable = new Object[50][50];
         _ctrl.addObserver(this);
+        colNames = new String[]{"Time", "Description"};
     }
 
     @Override
@@ -26,8 +31,10 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
 
     @Override
     public int getColumnCount() {
-        return eTable.length;
+        return colNames.length;
     }
+
+    public String getColumnName(int i) { return colNames[i]; }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -35,19 +42,29 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
     }
 
     @Override
-    public void onAdvanceStart(RoadMap map, List<Event> events, int time) { table(events); }
+    public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
+        table(events);
+    }
 
     @Override
-    public void onAdvanceEnd(RoadMap map, List<Event> events, int time) { table(events); }
+    public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
+        table(events);
+    }
 
     @Override
-    public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) { table(events); }
+    public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
+        table(events);
+    }
 
     @Override
-    public void onReset(RoadMap map, List<Event> events, int time) { table(events); }
+    public void onReset(RoadMap map, List<Event> events, int time) {
+        table(events);
+    }
 
     @Override
-    public void onRegister(RoadMap map, List<Event> events, int time) { table(events); }
+    public void onRegister(RoadMap map, List<Event> events, int time) {
+        table(events);
+    }
 
     @Override
     public void onError(String err) {
@@ -58,10 +75,12 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
     private void table(List<Event> events){
 
         for (int i = 0; i < events.size(); i++){
-            eTable[i][0] = events.get(i);
-            eTable[i][1] = events.get(i).getTime();
-            eTable[i][2] = events.get(i).toString();
+
+            eTable[i][0] = events.get(i).getTime();
+            eTable[i][1] = events.get(i).toString();
         }
+
+        this.fireTableDataChanged();
     }
 
 

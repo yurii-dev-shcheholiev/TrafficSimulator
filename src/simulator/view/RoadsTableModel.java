@@ -12,11 +12,15 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
 
     private Controller _ctrl;
     private Object[][] rTable;
+    private String[] colNames;
+
     public RoadsTableModel(Controller ctrl){
         super();
         _ctrl = ctrl;
         rTable = new Object[50][50];
         _ctrl.addObserver(this);
+        colNames = new String[]{"ID", "Length", "Max. Speed", "Current Speed Limit", "Total CO2 Emitted",
+                "CO2 Limit"};
     }
 
     @Override
@@ -26,8 +30,10 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
 
     @Override
     public int getColumnCount() {
-        return rTable.length;
+        return colNames.length;
     }
+
+    public String getColumnName(int i) { return colNames[i]; }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -50,7 +56,9 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
     }
 
     @Override
-    public void onReset(RoadMap map, List<Event> events, int time) { table(map); }
+    public void onReset(RoadMap map, List<Event> events, int time) {
+        table(map);
+    }
 
     @Override
     public void onRegister(RoadMap map, List<Event> events, int time) {
@@ -67,15 +75,16 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
 
         for (int i = 0; i < map.getRoads().size(); i++){
 
-                rTable[i][0] = map.getRoads().get(i);
-                rTable[i][1] = map.getRoads().get(i).getId();
-                rTable[i][2] = map.getRoads().get(i).getLength();
-                rTable[i][3] = map.getRoads().get(i).getWeather();
-                rTable[i][4] = map.getRoads().get(i).getMaxSpeed();
-                rTable[i][5] = map.getRoads().get(i).getSpeedLimit();
-                rTable[i][6] = map.getRoads().get(i).getTotalContamination();
-                rTable[i][7] = map.getRoads().get(i).getContLimit();
+                rTable[i][0] = map.getRoads().get(i).getId();
+                rTable[i][1] = map.getRoads().get(i).getLength();
+                rTable[i][2] = map.getRoads().get(i).getWeather();
+                rTable[i][3] = map.getRoads().get(i).getMaxSpeed();
+                rTable[i][4] = map.getRoads().get(i).getSpeedLimit();
+                rTable[i][5] = map.getRoads().get(i).getTotalContamination();
+                rTable[i][6] = map.getRoads().get(i).getContLimit();
         }
+
+        this.fireTableDataChanged();
     }
 
 }
