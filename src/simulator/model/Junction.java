@@ -104,6 +104,7 @@ public class Junction extends SimulatedObject{
 			JSONObject qu = new JSONObject();
 			JSONArray vIds = new JSONArray();
 			qu.put("road", rx.getId());
+
 			for (Vehicle vx: _mapQ.get(rx) ) {
 				vIds.put(vx.getId());
 			}
@@ -133,6 +134,7 @@ public class Junction extends SimulatedObject{
 	}
 
 	public List<List<Vehicle>> getQueues(){ return _queues; }
+
 
 
 }

@@ -54,6 +54,7 @@ public class MainWindow extends JFrame {
         tablesPanel.add(junctionsView);
 
 
+
         // maps
         JPanel mapView = createViewPanel(new MapComponent(_ctrl), "Map");
         mapView.setPreferredSize(new Dimension(500, 400));

@@ -82,7 +82,6 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
 
     private void table(List<Event> events){
         eTable = events;
-
         this.fireTableDataChanged();
     }
 

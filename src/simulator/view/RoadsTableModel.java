@@ -1,23 +1,22 @@
 package simulator.view;
 
 import simulator.control.Controller;
-import simulator.model.Event;
-import simulator.model.RoadMap;
-import simulator.model.TrafficSimObserver;
+import simulator.model.*;
 
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoadsTableModel extends AbstractTableModel implements TrafficSimObserver {
 
     private Controller _ctrl;
-    private Object[][] rTable;
+    private List<Road> rTable;
     private String[] colNames;
 
     public RoadsTableModel(Controller ctrl){
         super();
         _ctrl = ctrl;
-        rTable = new Object[50][50];
+        rTable = new ArrayList<>();
         _ctrl.addObserver(this);
         colNames = new String[]{"ID", "Length", "Max. Speed", "Current Speed Limit", "Total CO2 Emitted",
                 "CO2 Limit"};
@@ -25,7 +24,7 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
 
     @Override
     public int getRowCount() {
-        return rTable[0].length;
+        return rTable.size();
     }
 
     @Override
@@ -37,7 +36,25 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return rTable[rowIndex][columnIndex];
+
+        Road r = rTable.get(rowIndex);
+        switch (columnIndex) {
+            case 0:
+                return r.getId();
+            case 1:
+                return r.getLength();
+            case 2:
+                return r.getWeather();
+            case 3:
+                return r.getMaxSpeed();
+            case 4:
+                return r.getSpeedLimit();
+            case 5:
+                return r.getTotalContamination();
+            case 6:
+                return r.getContLimit();
+        }
+        return null;
     }
 
     @Override
@@ -51,19 +68,13 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
     }
 
     @Override
-    public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-
-    }
+    public void onEventAdded(RoadMap map, List<Event> events, Event e, int time){ table(map); }
 
     @Override
-    public void onReset(RoadMap map, List<Event> events, int time) {
-        table(map);
-    }
+    public void onReset(RoadMap map, List<Event> events, int time){ table(map); }
 
     @Override
-    public void onRegister(RoadMap map, List<Event> events, int time) {
-
-    }
+    public void onRegister(RoadMap map, List<Event> events, int time){ table(map); }
 
     @Override
     public void onError(String err) {
@@ -72,18 +83,7 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
 
 
     private void table(RoadMap map){
-
-        for (int i = 0; i < map.getRoads().size(); i++){
-
-                rTable[i][0] = map.getRoads().get(i).getId();
-                rTable[i][1] = map.getRoads().get(i).getLength();
-                rTable[i][2] = map.getRoads().get(i).getWeather();
-                rTable[i][3] = map.getRoads().get(i).getMaxSpeed();
-                rTable[i][4] = map.getRoads().get(i).getSpeedLimit();
-                rTable[i][5] = map.getRoads().get(i).getTotalContamination();
-                rTable[i][6] = map.getRoads().get(i).getContLimit();
-        }
-
+        rTable = map.getRoads();
         this.fireTableDataChanged();
     }
 

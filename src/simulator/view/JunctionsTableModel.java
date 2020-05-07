@@ -1,31 +1,30 @@
 package simulator.view;
 
 import simulator.control.Controller;
-import simulator.model.Event;
-import simulator.model.Road;
-import simulator.model.RoadMap;
-import simulator.model.TrafficSimObserver;
+import simulator.model.*;
 
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class JunctionsTableModel extends AbstractTableModel implements TrafficSimObserver {
 
     private Controller _ctrl;
-    private Object[][] jTable;
+    private List<Junction> jTable;
     private String[] colNames;
 
     public JunctionsTableModel(Controller ctrl){
         super();
         _ctrl = ctrl;
-        jTable = new Object[50][50];
+        jTable = new ArrayList<>();
         _ctrl.addObserver(this);
         colNames = new String[]{"ID", "Green Light", "Queues"};
     }
 
     @Override
     public int getRowCount() {
-        return jTable[0].length;
+        return jTable.size();
     }
 
     @Override
@@ -37,7 +36,22 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return jTable[rowIndex][columnIndex];
+        Junction j = jTable.get(rowIndex);
+        switch (columnIndex) {
+            case 0:
+                return j.getId();
+            case 1:
+                if(j.getGreenLightIndex() != -1){
+                    return j.getInRoads().get(j.getGreenLightIndex());
+                } else return "NONE";
+            case 2:
+                String q = "";
+                for (int i = 0; i < j.getInRoads().size(); i++) {
+                    q = q + j.getInRoads().get(i) + ":" + j.getQueues().get(i) + " ";
+                }
+                return q;
+        }
+           return null;
     }
 
     @Override
@@ -73,20 +87,7 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 
     private void table(RoadMap map){
 
-        for (int i = 0; i < map.getJunctions().size(); i++){
-
-            jTable[i][0] = map.getJunctions().get(i).getId();
-
-            if(map.getJunctions().get(i).getGreenLightIndex() != -1){
-                jTable[i][1] = map.getJunctions().get(i).getInRoads().get(map.getJunctions().get(i).getGreenLightIndex());
-            } else jTable[i][1] = "NONE";
-
-            //TODO Still Apply Better Implementation of Queues as in the PDF
-            for (Road r : map.getJunctions().get(i).getInRoads()) {
-                jTable[i][2] = r.getId() + ":" + map.getJunctions().get(i).getQueues();
-            }
-        }
-
+        jTable = map.getJunctions();
         this.fireTableDataChanged();
     }
 

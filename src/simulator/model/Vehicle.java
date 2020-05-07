@@ -68,6 +68,8 @@ public class Vehicle extends SimulatedObject {
 
     public int currentJunction(){ return _currentJ; }
 
+    public int getTotalContamination(){ return _totalContamination; }
+
 
     void setSpeed(int speed) {
         if (speed < 0)
