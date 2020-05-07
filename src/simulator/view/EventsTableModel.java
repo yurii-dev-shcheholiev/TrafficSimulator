@@ -20,8 +20,8 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
         super();
         _ctrl = ctrl;
         eTable = new Object[50][50];
-        _ctrl.addObserver(this);
         colNames = new String[]{"Time", "Description"};
+        _ctrl.addObserver(this);
     }
 
     @Override
@@ -75,6 +75,7 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
     private void table(List<Event> events){
 
         clearTable();
+
         for (int i = 0; i < events.size(); i++){
 
             eTable[i][0] = events.get(i).getTime();
@@ -84,10 +85,12 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
         this.fireTableDataChanged();
     }
 
-    private void clearTable(){
 
-
+    private void clearTable() {
+        for (Object[] row : eTable) {
+            for (Object ob : row) {
+                row = null;
+            }
+        }
     }
-
-
 }
