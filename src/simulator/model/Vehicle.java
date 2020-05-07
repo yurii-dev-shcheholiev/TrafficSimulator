@@ -72,7 +72,6 @@ public class Vehicle extends SimulatedObject {
     void setSpeed(int speed) {
         if (speed < 0)
             throw new IllegalArgumentException("Speed must be not negative");
-        // TODO REVIEW
         if (_status == VehicleStatus.WAITING)
             _currentSpeed = 0;
         else
