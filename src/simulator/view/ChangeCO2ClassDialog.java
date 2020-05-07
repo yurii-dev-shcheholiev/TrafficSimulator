@@ -108,6 +108,7 @@ public class ChangeCO2ClassDialog extends JDialog {
         pack();
         setResizable(false);
         setModal(true);
+        setLocationRelativeTo(null);
         setVisible(false);
     }
 

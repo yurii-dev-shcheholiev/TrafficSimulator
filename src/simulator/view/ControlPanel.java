@@ -80,7 +80,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _loadEventFileButton.setToolTipText("Load Events file");
         _loadEventFileButton.addActionListener(e -> {
             try {
-                int returnVal = _eventFileChooser.showOpenDialog(this);
+                int returnVal = _eventFileChooser.showOpenDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = _eventFileChooser.getSelectedFile();
                     InputStream inputStream = new FileInputStream(file);
@@ -164,7 +164,6 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
     private void changeCO2() {
         _changeCO2Dialog = new ChangeCO2ClassDialog();
         if (_changeCO2Dialog.open(_time, _roadMap.getVehicles()) == 1) {
-            System.out.println(_changeCO2Dialog.getNewCO2Event().toString());
             _ctrl.addEvent(_changeCO2Dialog.getNewCO2Event());
         }
     }
@@ -172,9 +171,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
     private void changeWeather() {
         _changeWeatherDialog = new ChangeWeatherDialog();
         if (_changeWeatherDialog.open(_time, _roadMap.getRoads()) == 1) {
-            System.out.println(_changeWeatherDialog.getNewWeatherEvent().toString());
             _ctrl.addEvent(_changeWeatherDialog.getNewWeatherEvent());
-
         }
     }
 
@@ -213,7 +210,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
     }
 
     private void quit() {
-        int n = JOptionPane.showOptionDialog(this,
+        int n = JOptionPane.showOptionDialog(null,
                 "Are sure you want to quit?","Quit",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
                 null,null, null);

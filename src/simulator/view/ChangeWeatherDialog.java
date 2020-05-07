@@ -107,6 +107,7 @@ public class ChangeWeatherDialog extends JDialog {
         pack();
         setResizable(false);
         setModal(true);
+        setLocationRelativeTo(null);
         setVisible(false);
     }
 
