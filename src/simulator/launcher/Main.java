@@ -160,7 +160,6 @@ public class Main {
 	}
 
 	public static void startGUIMode() throws FileNotFoundException {
-		//TODO
 		TrafficSimulator trafficSimulator = new TrafficSimulator();
 		Controller controller = new Controller(trafficSimulator, _eventsFactory);
 

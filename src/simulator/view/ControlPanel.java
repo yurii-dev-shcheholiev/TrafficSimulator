@@ -39,41 +39,17 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
     }
 
     private void initGUI() {
-        //TODO add lines or additional panels to group buttons, fix JSeparators
-//        setLayout(new FlowLayout(FlowLayout.LEFT));
-
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-
+        //TODO fix alignment and separators
 //        JToolBar
+        JToolBar jToolBar = new JToolBar();
+        add(jToolBar);
+
 
         // Create a relative path to resources/icons
         String absolutePath = new File("").getAbsolutePath();
         String iconsPath = absolutePath + "/resources/icons/";
         String fileLoaderPath = absolutePath + "/resources/examples/";
 
-        //Load Panel
-        JPanel loadPanel = new JPanel();
-        loadPanel.setBackground(Color.red);
-        loadPanel.setAlignmentX(LEFT_ALIGNMENT);
-        this.add(loadPanel);
-
-        //Changing Panel
-        JPanel changePanel = new JPanel();
-        changePanel.setBackground(Color.blue);
-        changePanel.setAlignmentX(LEFT_ALIGNMENT);
-        this.add(changePanel);
-
-        //Run Stop Ticks Panel
-        JPanel runPanel = new JPanel();
-        runPanel.setBackground(Color.yellow);
-        runPanel.setAlignmentX(LEFT_ALIGNMENT);
-        this.add(runPanel);
-
-        //Exit Panel
-        JPanel exitPanel = new JPanel();
-        exitPanel.setBackground(Color.magenta);
-        exitPanel.setAlignmentX(RIGHT_ALIGNMENT);
-        this.add(exitPanel);
 
 
         //Load Events File
@@ -97,14 +73,11 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
                 JOptionPane.showMessageDialog(this.getParent(), ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-        loadPanel.add(_loadEventFileButton);
+        jToolBar.add(_loadEventFileButton);
 
 
-        //TODO
         //JSeparator
-        JSeparator sep = new JSeparator(SwingConstants.VERTICAL);
-        sep.setPreferredSize(new Dimension(5, 42));
-        loadPanel.add(sep);
+        jToolBar.add(createJSeparator());
 
 
         //Change CO2 Class
@@ -113,7 +86,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _changeCO2Button.addActionListener(e -> {
             changeCO2();
         });
-        changePanel.add(_changeCO2Button);
+        jToolBar.add(_changeCO2Button);
 
         //Change Weather
         _changeWeatherButton = new JButton(new ImageIcon(iconsPath + "weather.png"));
@@ -121,11 +94,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _changeWeatherButton.addActionListener(e -> {
             changeWeather();
         });
-        changePanel.add(_changeWeatherButton);
-
+        jToolBar.add(_changeWeatherButton);
 
         //JSeparator
-        changePanel.add(new JSeparator(SwingConstants.VERTICAL));
+        jToolBar.add(createJSeparator());
 
         //Run
         _runButton = new JButton(new ImageIcon(iconsPath + "run.png"));
@@ -133,7 +105,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _runButton.addActionListener(e -> {
             run();
         });
-        runPanel.add(_runButton);
+        jToolBar.add(_runButton);
 
         //Stop
         _stopButton = new JButton(new ImageIcon(iconsPath + "stop.png"));
@@ -141,29 +113,33 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         _stopButton.addActionListener(e -> {
             stop();
         });
-        runPanel.add(_stopButton);
+        jToolBar.add(_stopButton);
 
         //Ticks
         JLabel ticksLabel = new JLabel("Ticks:");
         _ticksSpinner = new JSpinner(new SpinnerNumberModel(10, 1, 10000, 1));
         _ticksSpinner.setToolTipText("Simulation tick to run: 1-10000");
-        _ticksSpinner.setMaximumSize(new Dimension(80, 40));
-        _ticksSpinner.setMinimumSize(new Dimension(80, 40));
-        _ticksSpinner.setPreferredSize(new Dimension(80, 40));
-        runPanel.add(ticksLabel);
-        runPanel.add(_ticksSpinner);
+        _ticksSpinner.setMaximumSize(new Dimension(80, 42));
+        _ticksSpinner.setMinimumSize(new Dimension(80, 42));
+        _ticksSpinner.setPreferredSize(new Dimension(80, 42));
+        jToolBar.add(ticksLabel);
+        jToolBar.add(_ticksSpinner);
 
+
+        //Moving everything to the right
+        jToolBar.add(Box.createHorizontalGlue());
 
         //JSeparator
-        exitPanel.add(new JSeparator(SwingConstants.VERTICAL));
+        jToolBar.add(createJSeparator());
 
         //Exit
         _exitButton = new JButton(new ImageIcon(iconsPath + "exit.png"));
         _exitButton.setToolTipText("Exit the simulator");
+        _exitButton.setAlignmentX(RIGHT_ALIGNMENT);
         _exitButton.addActionListener(e -> {
             quit();
         });
-        exitPanel.add(_exitButton);
+        jToolBar.add(_exitButton);
     }
 
     private void changeCO2() {
@@ -189,7 +165,6 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
     private void runSim(int n) {
         if (n > 0 && !_stopped){
             try {
-                //TODO change 2 argument, to Output to Information tables !!!
                 _ctrl.run(1);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this.getParent(), ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -223,6 +198,12 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         if (n == 0) {
              System.exit(0);
         }
+    }
+
+    private JSeparator createJSeparator() {
+        JSeparator sep = new JSeparator(SwingConstants.VERTICAL);
+        sep.setPreferredSize(new Dimension(10, 42));
+        return sep;
     }
 
     @Override
