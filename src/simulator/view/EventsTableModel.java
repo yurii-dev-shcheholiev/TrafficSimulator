@@ -9,7 +9,6 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO Need to Fix that there are All ones at the begining and that remain in the table
 
 public class EventsTableModel extends AbstractTableModel implements TrafficSimObserver {
 

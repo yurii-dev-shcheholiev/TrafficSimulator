@@ -39,8 +39,6 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
     }
 
     private void initGUI() {
-        //TODO fix alignment and separators
-//        JToolBar
         JToolBar jToolBar = new JToolBar();
         add(jToolBar);
 

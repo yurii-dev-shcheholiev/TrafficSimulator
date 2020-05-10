@@ -107,7 +107,6 @@ public class Main {
     }
 
     private static void parseModeOption(CommandLine line) throws ParseException {
-		//TODO maybe change _modeGUI to int
 		if (line.hasOption("m")) {
 			String option = line.getOptionValue("m");
 			switch (option) {
