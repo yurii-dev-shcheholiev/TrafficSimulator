@@ -44,6 +44,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         JToolBar jToolBar = new JToolBar();
         add(jToolBar);
 
+
         // Create a relative path to resources/icons
         String absolutePath = new File("").getAbsolutePath();
         String iconsPath = absolutePath + "/resources/icons/";
@@ -76,9 +77,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
 
 
         //JSeparator
-        JSeparator sep1 = new JSeparator(SwingConstants.VERTICAL);
-        sep1.setPreferredSize(new Dimension(10, 42));
-        jToolBar.add(sep1);
+        jToolBar.add(createJSeparator());
 
 
         //Change CO2 Class
@@ -97,12 +96,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         });
         jToolBar.add(_changeWeatherButton);
 
-
         //JSeparator
-        JSeparator sep2 = new JSeparator(SwingConstants.VERTICAL);
-        sep1.setPreferredSize(new Dimension(1, 42));
-        jToolBar.add(sep2);
-
+        jToolBar.add(createJSeparator());
 
         //Run
         _runButton = new JButton(new ImageIcon(iconsPath + "run.png"));
@@ -124,9 +119,9 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         JLabel ticksLabel = new JLabel("Ticks:");
         _ticksSpinner = new JSpinner(new SpinnerNumberModel(10, 1, 10000, 1));
         _ticksSpinner.setToolTipText("Simulation tick to run: 1-10000");
-        _ticksSpinner.setMaximumSize(new Dimension(80, 40));
-        _ticksSpinner.setMinimumSize(new Dimension(80, 40));
-        _ticksSpinner.setPreferredSize(new Dimension(80, 40));
+        _ticksSpinner.setMaximumSize(new Dimension(80, 42));
+        _ticksSpinner.setMinimumSize(new Dimension(80, 42));
+        _ticksSpinner.setPreferredSize(new Dimension(80, 42));
         jToolBar.add(ticksLabel);
         jToolBar.add(_ticksSpinner);
 
@@ -134,11 +129,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         //Moving everything to the right
         jToolBar.add(Box.createHorizontalGlue());
 
-
         //JSeparator
-        JSeparator sep3 = new JSeparator(SwingConstants.VERTICAL);
-        sep1.setPreferredSize(new Dimension(10, 42));
-        jToolBar.add(sep3);
+        jToolBar.add(createJSeparator());
 
         //Exit
         _exitButton = new JButton(new ImageIcon(iconsPath + "exit.png"));
@@ -206,6 +198,12 @@ public class ControlPanel extends JPanel implements TrafficSimObserver {
         if (n == 0) {
              System.exit(0);
         }
+    }
+
+    private JSeparator createJSeparator() {
+        JSeparator sep = new JSeparator(SwingConstants.VERTICAL);
+        sep.setPreferredSize(new Dimension(10, 42));
+        return sep;
     }
 
     @Override
