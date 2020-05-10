@@ -1,2 +1,6 @@
-/bin/*
+
 /.idea/*
+.gitignore
+/bin/*
+/NAMES.txt
+/TrafficSimulatorTP.iml
